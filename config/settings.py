@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+APPLICATIONS = ["core", "user", "order", "shop"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -37,7 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    *list(map(lambda app: f"apps.{app}", APPLICATIONS)),
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
