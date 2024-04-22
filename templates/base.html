@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block head_title %}{% endblock %}</title>
+    <title>Beauty</title>
     <link rel="shortcut icon" href="{%static 'images/favicon.ico'%}" type="image/jpg">
     {% block extra_head %}
     {% endblock %}
@@ -15,10 +15,9 @@
 </head>
 <body>
     {% include "header.html" %}
-    {% include "footer.html" %}
-    {% block body %}
+    {% block content %}
     {% endblock %}
-
+    {% include "footer.html" %}
     <script src="{%static 'js/vendor/vendor.min.js'%}"></script>
     <script src="{%static 'js/plugins/plugins.min.js'%}"></script>
     <script src="{%static 'js/main.js'%}"></script>

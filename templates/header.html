@@ -11,6 +11,10 @@
                                     <a href=""><img src="{%static 'images/favicon.ico'%}" alt=""></a>
                                 </div>
                             </div>
+                            <select name="language">
+                                <option value="en-US">English</option>
+                                <option value="es-ES">Persion</option>
+                            </select>
                             <!-- End Header Logo -->
                             <!-- Start Header Main Menu -->
                             <div class="main-menu menu-color--black menu-hover-color--golden">
@@ -101,7 +105,11 @@
                                             <a href="">About Us</a>
                                         </li>
                                         <li>
-                                            <a href="">Contact Us & Counseling</a>
+                                            <a href="">Contact Us </a>
+                                            <ul class="sub-menu">
+                                                <li><a href="">Counseling</a></li>
+                                                <li><a href="">Contact Us</a></li>
+                                            </ul>
                                         </li>
                                     </ul>
                                 </nav>
@@ -109,6 +117,11 @@
                             <!-- End Header Main Menu Start -->
                             <!-- Start Header Action Link -->
                             <ul class="header-action-link action-color--black action-hover-color--golden">
+                                <li>
+                                    <a href="{% url 'login'%}" >
+                                        <i class="icon-user"></i>
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="#offcanvas-wishlish" class="offcanvas-toggle">
                                         <i class="icon-heart"></i>
@@ -162,8 +175,8 @@
                     <div class="mobile-right-side">
                         <ul class="header-action-link action-color--black action-hover-color--golden">
                             <li>
-                                <a href="#search">
-                                    <i class="icon-magnifier"></i>
+                                <a href="{% url 'login'%}" >
+                                    <i class="icon-user"></i>
                                 </a>
                             </li>
                             <li>
@@ -176,6 +189,11 @@
                                 <a href="#offcanvas-add-cart" class="offcanvas-toggle">
                                     <i class="icon-bag"></i>
                                     <span class="item-count">3</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#search">
+                                    <i class="icon-magnifier"></i>
                                 </a>
                             </li>
                             <li>
