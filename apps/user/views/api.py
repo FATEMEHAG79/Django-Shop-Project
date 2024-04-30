@@ -104,3 +104,48 @@ class RegisterView(generic.CreateView):
                             )
                             return redirect("send_email")
                     return response.HttpResponse("User not found !", status=404)
+
+
+class LoginViewOtp(generic.View):
+    template_name = "auth/sign_in.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        email = self.request.POST.get("email", None)
+        if not email:
+            return response.HttpResponse("email should not be null !", status=400)
+        user = User.objects.filter(email=email).exists()
+        if user:
+            if not cache.get_or_create(email, uuid4(), 180):
+                token = cache.cache.get(email)
+                code = str(cache.cache.get(email).int)[0:4]
+                # send mail !
+                mail.send_mail(
+                    f"Verification {email}",
+                    email,
+                    "auth/email-otp.html",
+                    {"user": user, "code": code},
+                )
+
+                return redirect(f"otp/{str(token)}")
+        return response.HttpResponse("User not found !", status=404)
+
+
+class ConfirmOtp(generic.View):
+    template_name = "auth/confirm_code.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request, token):
+        number1 = self.request.POST.get("number1", None)
+        number2 = self.request.POST.get("number2", None)
+        number3 = self.request.POST.get("number3", None)
+        number4 = self.request.POST.get("number4", None)
+        otp = int(number1 + number2 + number3 + number4)
+        if not all((number1, number2, number3, number4)):
+            return response.HttpResponse("field should not be null !", status=400)
+        email = cache.cache.get(value=token)
+        code = str(token.int)[0:4]
