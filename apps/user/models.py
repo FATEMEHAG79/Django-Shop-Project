@@ -1,57 +1,47 @@
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
+from apps.user.managers import UserManager
+from apps.core.models import TimeStampMixin, LogicalMixin
+from django.utils.translation import gettext_lazy as _
 
 
-class MyUserManager(BaseUserManager):
-    def create_user(self, email, username, password=None):
-        if not email:
-            raise ValueError("Users must have an email address")
-        if not username:
-            raise ValueError("Users must have a username")
-
-        user = self.model(email=self.normalize_email(email), username=username)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, username, password):
-        user = self.create_user(
-            email=self.normalize_email(email), password=password, username=username
-        )
-        user.is_admin = True
-        user.is_staff = True
-        user.is_superuser = True
-        user.save(using=self._db)
-        return user
+gender = [("f", "female"), ("m", "mail")]
 
 
-class User(AbstractUser):
+class User(LogicalMixin, AbstractUser, TimeStampMixin):
     username_validator = RegexValidator(
         r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters are allowed."
     )
-    phone_number_validator = RegexValidator(
-        r"^(?:\+45|\(\+45\)|\(0045\)|0045|(?!00))\d{8}$", "not valid phone number."
-    )
-    password_validator = RegexValidator(
-        r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,18}$",
-        "not valid pass word.",
-    )
-
     username = models.CharField(
-        unique=True, max_length=48, validators=[username_validator]
+        unique=True,
+        max_length=48,
+        validators=[username_validator],
+        error_messages={"unique": ("A user with this username already exists")},
     )
-    is_admin = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    is_operator = models.BooleanField(default=False)
-    phone_number = models.CharField(
-        unique=True, max_length=11, validators=[phone_number_validator]
+    email = models.EmailField(unique=True)
+    gender = models.CharField(max_length=48, choices=gender)
+    birthday = models.DateTimeField(null=True, blank=True)
+    is_active = models.BooleanField(_("active"), default=False)
+    phone_number = models.BigIntegerField(
+        _("phone_number"),
+        unique=True,
+        validators=[RegexValidator(r"^989[0-3,9]\d{8}$")],
+        error_messages={"unique": ("A user with mobile number already exists")},
     )
-    objects = MyUserManager()
-    password = models.CharField(max_length=16, validators=[password_validator])
+    objects = UserManager()
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
 
-    def __str__(self):
-        return self.username
+    class Meta:
+        indexes = [
+            models.Index(fields=["username"]),
+            models.Index(fields=["email"]),
+        ]
+
+    def get_full_name(self):
+        full_name = "%s %s" % (self.first_name, self.last_name)
+        return full_name.strip()
 
 
 class Address(models.Model):
