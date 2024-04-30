@@ -21,7 +21,7 @@
                                 <nav>
                                     <ul>
                                         <li class="has-dropdown">
-                                            <a class="active main-menu-link" href="">Home<i class="fa fa-angle-down"></i></a>
+                                            <a class="active main-menu-link" href="{% url 'home'%}">Home<i class="fa fa-angle-down"></i></a>
                                         </li>
                                         <li class="has-dropdown has-megaitem">
                                             <a href="">Shop <i
@@ -108,7 +108,7 @@
                                             <a href="">Contact Us </a>
                                             <ul class="sub-menu">
                                                 <li><a href="">Counseling</a></li>
-                                                <li><a href="">Contact Us</a></li>
+                                                <li><a href="{% url 'contact'%}">Contact Us</a></li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -118,7 +118,7 @@
                             <!-- Start Header Action Link -->
                             <ul class="header-action-link action-color--black action-hover-color--golden">
                                 <li>
-                                    <a href="{% url 'login'%}" >
+                                    <a href="{%url 'loginotp'%}" >
                                         <i class="icon-user"></i>
                                     </a>
                                 </li>
@@ -175,7 +175,7 @@
                     <div class="mobile-right-side">
                         <ul class="header-action-link action-color--black action-hover-color--golden">
                             <li>
-                                <a href="{% url 'login'%}" >
+                                <a href="{% url 'loginotp'%}" >
                                     <i class="icon-user"></i>
                                 </a>
                             </li>
@@ -223,7 +223,7 @@
                 <div class="offcanvas-menu">
                     <ul>
                         <li>
-                            <a href="#"><span>Home</span></a>
+                            <a href="{% url 'home'%}"><span>Home</span></a>
                         </li>
                         <li>
                             <a href="#"><span>Shop</span></a>
@@ -300,7 +300,13 @@
                             </ul>
                         </li>
                         <li><a href="{% url 'about'%}">About Us</a></li>
-                        <li><a href="">Contact Us</a></li>
+                        <li>
+                            <a href="">Contact Us </a>
+                            <ul class="sub-menu">
+                                <li><a href="">Counseling</a></li>
+                                <li><a href="{% url 'contact'%}">Contact Us</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div> <!-- End Mobile Menu Nav -->
             </div> <!-- End Mobile Menu -->
