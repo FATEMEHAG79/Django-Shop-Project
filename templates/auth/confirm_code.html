@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   <title>Beauty</title>
+    <style>
+        .form {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 500px;
+            background-color: white;
+            border-radius: 50px;
+            padding: 200px;
+        }
+        .title{
+                font-size: 50px;
+                font-weight: bold;
+                color: black;
+        }
+        .message {
+            color: #a3a3a3;
+            font-size: 30px;
+            margin-top: 5px;
+            text-align: center;
+        }
+        .inputs {
+            margin-top: 10px;
+        }
+        .inputs input{
+            width: 80px;
+            height: 50px;
+            text-align: center;
+            border: none;
+            border-bottom: 1.5px solid #dfbc9f;
+            margin: 0 10px;
+        }
+        .inputs input:focus{
+            border-bottom: 3px solid #c3a886;
+            outline: none;
+        }
+        .action {
+            margin-top: 24px;
+            padding: 30px 60px;
+            border-radius: 8px;
+            border: none;
+            background-color: #eacda6;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            align-self: end;
+                    }
+    </style>
+</head>
+<body>
+        <div style="align-items: center ; margin-left: 25%">
+            <form class="form">
+            <div class="title">0TP</div>
+            <div class="title" >Verification Code</div>
+            <p class="message">
+            We have sent a verification code to your email.
+            </p>
+            <div class="inputs">
+            <input name="number1" type="text" maxlength="1" />
+            <input name="number2" type="text" maxlength="1" />
+            <input name="number3" type="text" maxlength="1" />
+            <input name="number4" type="text" maxlength="1" />
+            </div>
+                <a>
+                    <button class="action">verify me</button>
+                </a>
+                <a href="{%url 'home'%}">
+                    <button class="action">Return Home</button>
+                </a>
+            </form>
+        </div>
+
+</body>
+</html>
