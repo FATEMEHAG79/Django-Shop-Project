@@ -8,6 +8,7 @@ from django.urls import path, include
 
 urlpatterns = i18n_patterns(
     path("admin/", admin.site.urls),
+    path("", include("public.urls")),
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
     path("", include("apps.user.urls")),
     path("Aboutus/", TemplateView.as_view(template_name="about.html"), name="about"),
