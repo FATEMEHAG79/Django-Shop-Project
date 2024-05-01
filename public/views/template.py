@@ -9,10 +9,8 @@ class HomeView(generic.TemplateView):
     template_name = "public/home.html"
 
 
-
 class AboutView(generic.TemplateView):
     template_name = "public/about.html"
-
 
 
 class ContactUs(generic.TemplateView):

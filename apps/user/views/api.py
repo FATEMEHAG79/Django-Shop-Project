@@ -87,7 +87,7 @@ class LoginView(generic.View):
 
             # activate
             if not cache.get_or_create(
-                    f"activate_token_user_{user.username}", lambda: uuid4().hex, 300
+                f"activate_token_user_{user.username}", lambda: uuid4().hex, 300
             ):
                 # send mail !
                 mail.send_mail(

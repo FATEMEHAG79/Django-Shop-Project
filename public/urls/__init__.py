@@ -9,5 +9,4 @@ urlpatterns = [
         template.ContactUs.as_view(),
         name="contact",
     ),
-
 ]
