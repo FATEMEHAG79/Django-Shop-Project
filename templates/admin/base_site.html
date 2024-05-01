@@ -1,0 +1,12 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}  Panel Shop Beauty{% endblock %}
+
+{% block branding %}
+<div id="site-name"><img src="{%static 'images/favicon.ico'%}" style="width: 70px;height: auto;"><a href="{% url 'admin:index' %}" style="color: black"> Shop Beauty</a></div>
+{% if user.is_anonymous %}
+  {% include "admin/color_theme_toggle.html" %}
+{% endif %}
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
