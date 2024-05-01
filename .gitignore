@@ -167,3 +167,5 @@ cython_debug/
 /.idea/project.iml
 /.idea/vcs.xml
 /.idea/dataSources.xml
+/tmp/cache/b63308b9508bfb2159364ade672c43aa.djcache
+/tmp/cache/7afe15b9a2efa507adff7469558fab19.djcache
