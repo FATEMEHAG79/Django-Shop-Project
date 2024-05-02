@@ -1,12 +1,18 @@
 from django.contrib import messages
 from django.core.mail import send_mail
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views import generic
 from django.conf import settings
+from apps.shop.models import Category
 
 
 class HomeView(generic.TemplateView):
-    template_name = "public/home.html"
+    def get(self, request):
+        context = {
+            "subcategory": Category.objects.filter(is_active=True, main=True),
+            "category": Category.objects.filter(is_active=True, main=False),
+        }
+        return render(request, "public/home.html", context)
 
 
 class AboutView(generic.TemplateView):

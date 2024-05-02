@@ -30,49 +30,22 @@
                                             <div class="mega-menu">
                                                 <ul class="mega-menu-inner">
                                                     <!-- Mega Menu Sub Link -->
+                                                    {% for subcat  in subcategory %}
                                                     <li class="mega-menu-item">
-                                                        <a href="#" class="mega-menu-item-title">Perfume & Spray</a>
+                                                        <a href="#" class="mega-menu-item-title">{{ subcat.title }}</a>
                                                         <ul class="mega-menu-sub">
-                                                            <li><a href="">Women'Perfume</a></li>
-                                                            <li><a href="">Women'Body Splash</a></li>
-                                                            <li><a href="">Men'Perfume</a></li>
-                                                            <li><a href="">Men'Body Splash</a></li>
+                                                            {% for cat in category %}
+
+                                                                    <li>
+                                                                        <a href="">{{ cat.title}}</a>
+                                                                    </li>
+
+                                                            {% endfor %}
                                                         </ul>
                                                     </li>
+                                                    {% endfor %}
                                                     <!-- Mega Menu Sub Link -->
-                                                    <li class="mega-menu-item">
-                                                        <a href="#" class="mega-menu-item-title">Skin Care</a>
-                                                        <ul class="mega-menu-sub">
-                                                            <li><a href="">Fecial Cleanser</a></li>
-                                                            <li><a href="">Sun Cream</a></li>
-                                                            <li><a href="">Cloudy & Moisturizing Cream</a></li>
-                                                            <li><a href="">Anti Boil</a></li>
-                                                            <li><a href="">Mask</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <!-- Mega Menu Sub Link -->
-                                                    <li class="mega-menu-item">
-                                                        <a href="#" class="mega-menu-item-title">Hair Care</a>
-                                                        <ul class="mega-menu-sub">
-                                                            <li><a href="">Shampoo</a></li>
-                                                            <li><a href="">Hair Conditioner</a></li>
-                                                            <li><a href=""></a>Hair Style</li>
-                                                            <li><a href="">Hair Oil</a>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <!-- Mega Menu Sub Link -->
-                                                    <li class="mega-menu-item">
-                                                        <a href="#" class="mega-menu-item-title">Cosmetic</a>
-                                                        <ul class="mega-menu-sub">
-                                                            <li><a href=""></a>Mascara</li>
-                                                            <li><a href=""></a>Eye Shadow & Eyeliner</li>
-                                                            <li><a href=""></a>lipstic</li>
-                                                            <li><a href=""></a>Cream</li>
-                                                            <li><a href=""></a>Nail</li>
-                                                            <li><a href=""></a>Eyebrow</li>
-                                                        </ul>
-                                                    </li>
+
                                                 </ul>
                                             </div>
                                         </li>
