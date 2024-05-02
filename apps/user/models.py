@@ -28,6 +28,7 @@ class User(LogicalMixin, AbstractUser, TimeStampMixin):
         unique=True,
         validators=[RegexValidator(r"^989[0-3,9]\d{8}$")],
         error_messages={"unique": ("A user with mobile number already exists")},
+        null=True,
     )
     objects = UserManager()
     USERNAME_FIELD = "username"

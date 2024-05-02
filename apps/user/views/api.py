@@ -93,7 +93,7 @@ class LoginView(generic.View):
                 mail.send_mail(
                     f"Verification {user.username}",
                     user.email,
-                    "mail/verify.html",
+                    "auth/verify.html",
                     {
                         "user": user,
                         "token": cache.cache.get(
@@ -103,6 +103,9 @@ class LoginView(generic.View):
                     },
                 )
                 return redirect("send_email")
+            return response.HttpResponse(
+                "otp send !please try after 3 minitue.", status=404
+            )
         return response.HttpResponse("User not found !", status=404)
 
 
@@ -116,36 +119,46 @@ class LoginViewOtp(generic.View):
         email = self.request.POST.get("email", None)
         if not email:
             return response.HttpResponse("email should not be null !", status=400)
-        user = User.objects.filter(email=email).exists()
+        user = User.objects.filter(email=email)
         if user:
-            if not cache.get_or_create(email, uuid4(), 180):
-                token = cache.cache.get(email)
-                code = str(cache.cache.get(email).int)[0:4]
+            token = uuid4().hex
+            if not cache.get_or_create(token, email, 180):
+                code = "".join([car for car in token if car.isnumeric()][0:4])
                 # send mail !
                 mail.send_mail(
                     f"Verification {email}",
                     email,
                     "auth/email-otp.html",
-                    {"user": user, "code": code},
+                    {"user": email, "code": code},
                 )
 
-                return redirect(f"otp/{str(token)}")
-        return response.HttpResponse("User not found !", status=404)
+                return redirect("confirmotp", str(token))
+            return response.HttpResponse(
+                "otp send !please try after 3 minitue.", status=404
+            )
+        return response.HttpResponse("otp code is not correct !", status=404)
 
 
 class ConfirmOtp(generic.View):
     template_name = "auth/confirm_code.html"
 
-    def get(self, request):
-        return render(request, self.template_name)
+    def get(self, request, token):
+        return render(request, self.template_name, {"token": token})
 
     def post(self, request, token):
         number1 = self.request.POST.get("number1", None)
         number2 = self.request.POST.get("number2", None)
         number3 = self.request.POST.get("number3", None)
         number4 = self.request.POST.get("number4", None)
-        otp = int(number1 + number2 + number3 + number4)
+        otp = str(number1 + number2 + number3 + number4)
         if not all((number1, number2, number3, number4)):
             return response.HttpResponse("field should not be null !", status=400)
-        email = cache.cache.get(value=token)
-        code = str(token.int)[0:4]
+        username = cache.cache.get(token)
+        code ="".join([car for car in token if car.isnumeric()][0:4])
+        if otp == code:
+            user = User.objects.filter(email=username).exists()
+            if user:
+                user1 = authenticate(email=username)
+                login(request, user1)
+                return redirect("home")
+            return response.HttpResponse("User not found !", status=404)
