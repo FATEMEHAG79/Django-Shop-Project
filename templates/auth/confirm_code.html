@@ -55,7 +55,12 @@
 </head>
 <body>
         <div style="align-items: center ; margin-left: 25%">
-            <form class="form">
+            <a href="{%url 'home'%}">
+                    <button class="action">Return Home</button>
+             </a>
+            <div>
+                <form  class="form" action="" method="post" >
+                {% csrf_token %}
             <div class="title">0TP</div>
             <div class="title" >Verification Code</div>
             <p class="message">
@@ -70,10 +75,9 @@
                 <a>
                     <button class="action">verify me</button>
                 </a>
-                <a href="{%url 'home'%}">
-                    <button class="action">Return Home</button>
-                </a>
             </form>
+
+            </div>
         </div>
 
 </body>
