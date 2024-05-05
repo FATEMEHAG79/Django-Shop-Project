@@ -1,84 +1,103 @@
 from apps.user.models import User
 from uuid import uuid4
 from utils import cache, mail
-from django.http import response
 from django.views import generic
+from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login
 
 
-class RegisterView(generic.CreateView):
-    template_name = "auth/sign_up.html"
+class SendOtp(generic.CreateView):
+    template_name = "auth/sendotp.html"
 
     def get(self, request):
         return render(request, self.template_name)
 
     def post(self, request):
-        phone_number = request.POST.get("phone_number", None)
-        first_name = request.POST.get("first_name", None)
-        last_name = request.POST.get("last_name", None)
         email = request.POST.get("email", None)
-        username = request.POST.get("username", None)
-        password = request.POST.get("password", None)
-        password_1 = request.POST.get("password_1", None)
-        if not all(
-            (username, password, email, first_name, last_name, username, password_1)
-        ):
-            return response.HttpResponse(
-                " This field' should not be null !", status=400
+        if not email:
+            messages.info(request, "email should not be Null.")
+            return redirect("signup/in")
+        # otp
+        token = uuid4().hex
+        if not cache.get_or_create(email, token, 120):
+            code = "".join([car for car in token if car.isnumeric()][0:4])
+            # send mail !
+            mail.send_mail(
+                f"Verification {email}",
+                email,
+                "auth/email-otp.html",
+                {"user": email, "code": code},
             )
-        if not password_1 == password:
-            return response.HttpResponse(
-                request, "password and confirm is not simillar."
-            )
-        else:
-            user, created = User.objects.get_or_create(
-                phone_number=phone_number,
-                email=email,
-                username=username,
-                password=password,
-                first_name=first_name,
-                last_name=last_name,
-            )
-            user.set_password(password)
-            user.save()
-            if not created:
-                return response.HttpResponse("User already registered!", status=400)
-            # activate
-            if not cache.get_or_create(
-                f"activate_token_user_{user.username}", lambda: uuid4().hex, 180
-            ):
-                # send mail !
-                mail.send_mail(
-                    f"Verification {user.username}",
-                    user.email,
-                    "auth/verify.html",
-                    {
-                        "user": user,
-                        "token": cache.cache.get(
-                            f"activate_token_user_{user.username}"
-                        ),
-                        "host": self.request.get_host(),
-                    },
-                )
+            user = User.objects.filter(email=email).exists()
+            if user:
+                return redirect("confirmotp", email, token)
+            else:
+                return redirect("confirmotpregister", email, token)
+        messages.info(request, "otp send !please try after 3 minitue.")
+        return redirect("signup/in")
 
-                return redirect("send_email")
+
+class ConfirmOtp(generic.View):
+    template_name = "auth/sign_in.html"
+
+    def get(self, request, email, token):
+        context = {"email": email, "token": token}
+        return render(request, self.template_name, context)
+
+    def post(self, request, token, email):
+        otp = self.request.POST.get("otp", None)
+        if not otp:
+            messages.info(request, "email should not be Null.")
+            return redirect("congirmotp", email, token)
+        code = "".join([car for car in token if car.isnumeric()][0:4])
+        if otp == code:
+            user = User.objects.get(email=email)
+            if user is not None:
+                if user.is_active:
+                    login(self.request, user)
+                    return redirect("home")
+                # activate
+                if not cache.get_or_create(
+                    f"activate_token_user_{user.username}", lambda: uuid4().hex, 120
+                ):
+                    # send mail !
+                    mail.send_mail(
+                        f"Verification {user.username}",
+                        user.email,
+                        "auth/verify.html",
+                        {
+                            "user": user,
+                            "token": cache.cache.get(
+                                f"activate_token_user_{user.username}"
+                            ),
+                            "host": self.request.get_host(),
+                        },
+                    )
+                    return redirect("send_email")
+                messages.info(
+                    request, "email verification send !please try after 2 minitue."
+                )
+                return redirect("signup/in")
+        else:
+            messages.info(request, "otp is not correct.")
+            return redirect("confirmotp", email, token)
 
 
 class LoginView(generic.View):
     template_name = "auth/sign_in.html"
 
-    def get(self, request):
-        return render(request, self.template_name)
+    def get(self, request, email, token):
+        context = {"email": email, "token": token}
+        return render(request, self.template_name, context)
 
-    def post(self, request):
+    def post(self, request, email, token):
         username = self.request.POST.get("username", None)
         password = self.request.POST.get("password", None)
 
         if not all((username, password)):
-            return response.HttpResponse(
-                "'username' or 'password' should not be null !", status=400
-            )
+            messages.info("'username' or 'password' should not be null !")
+            return redirect("")
 
         if user := authenticate(password=password, username=username):
             if user.is_active:
@@ -87,7 +106,7 @@ class LoginView(generic.View):
 
             # activate
             if not cache.get_or_create(
-                f"activate_token_user_{user.username}", lambda: uuid4().hex, 300
+                f"activate_token_user_{user.username}", lambda: uuid4().hex, 120
             ):
                 # send mail !
                 mail.send_mail(
@@ -103,62 +122,68 @@ class LoginView(generic.View):
                     },
                 )
                 return redirect("send_email")
-            return response.HttpResponse(
-                "otp send !please try after 3 minitue.", status=404
-            )
-        return response.HttpResponse("User not found !", status=404)
+            messages.info("otp send !please try after 3 minitue.")
+            return redirect("login")
 
 
-class LoginViewOtp(generic.View):
-    template_name = "auth/sign_in.html"
+class ConfirmOtpRegister(generic.View):
+    template_name = "auth/confirmotp_signup.html"
 
-    def get(self, request):
-        return render(request, self.template_name)
+    def get(self, request, email, token):
+        context = {"email": email, "token": token}
+        return render(request, self.template_name, context)
 
-    def post(self, request):
-        email = self.request.POST.get("email", None)
-        if not email:
-            return response.HttpResponse("email should not be null !", status=400)
-        user = User.objects.filter(email=email)
-        if user:
-            token = uuid4().hex
-            if not cache.get_or_create(token, email, 180):
-                code = "".join([car for car in token if car.isnumeric()][0:4])
+    def post(self, request, email,token):
+        otp = self.request.POST.get("otp", None)
+        if not otp:
+            messages.info(request, "otp should not be Null.")
+            return redirect("confirmotpregister", email, token)
+        token_ = cache.cache.get(email)
+        code = "".join([car for car in token if car.isnumeric()][0:4])
+        if otp == code:
+            user = User.objects.create_user(self,email=email)
+            user.save()
+            return redirect("register", email)
+        messages.info(request, "otp is not correct.")
+        return redirect("register", email, token)
+
+
+class Registeration(generic.View):
+    template_name = "auth/register.html"
+
+    def get(self, request, email):
+        context ={"email":email}
+        return render(request, self.template_name, context)
+
+    def post(self, request, email):
+        username = self.request.POST.get("username", None)
+        password = self.request.POST.get("password", None)
+        confirmpassword = self.request.POST.get("password1", None)
+        if not all((username, password, confirmpassword)):
+            messages.info(request, "this field should not be Null.")
+            return redirect()
+        if password == confirmpassword:
+            user = User.objects.get(email=email)
+            user.username = username
+            user.set_password(password)
+            user.save()
+            # activate
+            if not cache.get_or_create(
+                f"activate_token_user_{user.username}", lambda: uuid4().hex, 120
+            ):
                 # send mail !
                 mail.send_mail(
-                    f"Verification {email}",
-                    email,
-                    "auth/email-otp.html",
-                    {"user": email, "code": code},
+                    f"Verification {user.username}",
+                    user.email,
+                    "auth/verify.html",
+                    {
+                        "user": user,
+                        "token": cache.cache.get(
+                            f"activate_token_user_{user.username}"
+                        ),
+                        "host": self.request.get_host(),
+                    },
                 )
-
-                return redirect("confirmotp", str(token))
-            return response.HttpResponse(
-                "otp send !please try after 3 minitue.", status=404
-            )
-        return response.HttpResponse("otp code is not correct !", status=404)
-
-
-class ConfirmOtp(generic.View):
-    template_name = "auth/confirm_code.html"
-
-    def get(self, request, token):
-        return render(request, self.template_name, {"token": token})
-
-    def post(self, request, token):
-        number1 = self.request.POST.get("number1", None)
-        number2 = self.request.POST.get("number2", None)
-        number3 = self.request.POST.get("number3", None)
-        number4 = self.request.POST.get("number4", None)
-        otp = str(number1 + number2 + number3 + number4)
-        if not all((number1, number2, number3, number4)):
-            return response.HttpResponse("field should not be null !", status=400)
-        username = cache.cache.get(token)
-        code ="".join([car for car in token if car.isnumeric()][0:4])
-        if otp == code:
-            user = User.objects.filter(email=username).exists()
-            if user:
-                user1 = authenticate(email=username)
-                login(request, user1)
-                return redirect("home")
-            return response.HttpResponse("User not found !", status=404)
+                return redirect("send_email")
+        messages.info(request, "password and confirm password is not match.")
+        return redirect("register", email)

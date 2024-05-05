@@ -8,10 +8,15 @@ urlpatterns = [
         template.VerificationView.as_view(),
         name="verification",
     ),
-    path("signup/", api.RegisterView.as_view(), name="signup"),
+    path("login/", api.SendOtp.as_view(), name="signup/in"),
     path("login/", api.LoginView.as_view(), name="login"),
-    path("login_otp/", api.LoginViewOtp.as_view(), name="loginotp"),
-    path("otp/<str:token>/", api.ConfirmOtp.as_view(), name="confirmotp"),
+    path("login/<str:email>/<str:token>", api.ConfirmOtp.as_view(), name="confirmotp"),
+    path(
+        "Register/<str:email>/<str:token>",
+        api.ConfirmOtpRegister.as_view(),
+        name="confirmotpregister",
+    ),
+    path("Register/<str:email>/", api.Registeration.as_view(), name="register"),
     path(
         "send_email/",
         TemplateView.as_view(template_name="auth/send_email.html"),

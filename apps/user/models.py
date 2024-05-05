@@ -11,13 +11,14 @@ gender = [("f", "female"), ("m", "mail")]
 
 class User(LogicalMixin, AbstractUser, TimeStampMixin):
     username_validator = RegexValidator(
-        r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters are allowed."
+        "^[a-zA-Z0-9_]*$", "Only alphanumeric characters are allowed."
     )
     username = models.CharField(
         unique=True,
         max_length=48,
         validators=[username_validator],
         error_messages={"unique": ("A user with this username already exists")},
+        null=True,blank=True
     )
     email = models.EmailField(unique=True)
     gender = models.CharField(max_length=48, choices=gender)

@@ -233,34 +233,14 @@ body{
 
 <body>
     <div class="container" id="container">
-        <div class="form-container sign-up">
-              <form action="{% url 'login' %}" method="post" >
-                  <div>
-                    <style>
-                        h5{
-                            color: red;
-                        }
-                    </style>
-                    {% if messages %}
-                        {% for message in messages %}
-                        <h5>{{message}}</h5>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                     {% csrf_token %}
-                <h1>Sign In</h1>
-                <div class="social-icons" >
-                     <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                </div>
-                <input type="username" name="username" placeholder="Email or username">
-                <input type="password" name="password" placeholder="Password">
-                <a href="#">Forget Your Password?</a>
-                <button>Sign In</button>
-            </form>
-        </div>
         <div class="form-container sign-in">
-              <form action="" method="post" >
-                   <div>
+                 <form action="" method="post" >
+                {% csrf_token %}
+                <h1>please check your email & Enter otp code.</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                </div>
+                     <div>
                     <style>
                         h5{
                             color: red;
@@ -271,35 +251,26 @@ body{
                         <h5>{{message}}</h5>
                         {% endfor %}
                     {% endif %}
-                </div>
-                     {% csrf_token %}
-                <h1>please check your email & Enter otp code.</h1>
-                <div class="social-icons" >
-                     <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                </div>
-                <input type="otp" name="otp" placeholder="code">
-                <button>sign in</button>
-              <div class="timer">
+              </div>
+                 <div class="timer">
+                Didn't recieve code
                 <button type="button" id="resend">Click to Resend</button>
-                <span class="time" style="color: rosybrown ;font-size: 20px"></span>
-          </div>
+                <span class="time"></span>
+                 </div>
+                <input type="name"  name="otp" placeholder="code">
+                <button>sign up</button>
             </form>
-
         </div>
-        <div class="toggle-container">
+
+         <div class="toggle-container">
             <div class="toggle">
-                <div class="toggle-panel toggle-left">
-                    <button class="hidden" id="login">Sign up with otp</button>
-                      <a href="{%url 'home'%}"><button class="hidden" >Home</button></a>
-                </div>
                 <div class="toggle-panel toggle-right">
-                    <button class="hidden" id="register">Sign Up with password.</button>
-                    <a href="{%url 'home'%}"><button class="hidden" >Home</button></a>
+                    <h1>you are not register.</h1>
+                       <a href="{%url 'home'%}"><button class="hidden" >Home</button></a>
                 </div>
             </div>
         </div>
     </div>
-
     <script src="{%static 'js/script.js'%}"></script>
  <script>
       function timer(n) {
