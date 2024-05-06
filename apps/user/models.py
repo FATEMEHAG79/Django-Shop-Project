@@ -20,12 +20,13 @@ class User(LogicalMixin, AbstractUser, TimeStampMixin):
         max_length=48,
         validators=[username_validator],
         error_messages={"unique": ("A user with this username already exists")},
-        null=True,blank=True
+        null=True,
+        blank=True,
     )
     email = models.EmailField(unique=True)
     gender = models.CharField(max_length=48, choices=gender)
     birthday = models.DateTimeField(null=True, blank=True)
-    slug=models.SlugField(max_length=80)
+    slug = models.SlugField(max_length=80)
     is_active = models.BooleanField(_("active"), default=False)
     phone_number = models.BigIntegerField(
         _("phone_number"),
@@ -41,12 +42,12 @@ class User(LogicalMixin, AbstractUser, TimeStampMixin):
     def save(self, *args, **kwargs):  # new
         self.slug = slugify(self.username)
         return super().save(*args, **kwargs)
+
     class Meta:
         indexes = [
             models.Index(fields=["username"]),
             models.Index(fields=["email"]),
         ]
-
 
     def get_full_name(self):
         full_name = "%s %s" % (self.first_name, self.last_name)

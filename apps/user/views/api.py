@@ -49,13 +49,11 @@ class ConfirmOtp(generic.View):
     def post(self, request, token, email):
         otp = self.request.POST.get("otp", None)
         if not otp:
-            return response.HttpResponse(
-                "otp should not be null !", status=400
-            )
+            return response.HttpResponse("otp should not be null !", status=400)
         code = "".join([car for car in token if car.isnumeric()][0:4])
         if otp == code:
             user = User.objects.get(email=email)
-            if  user := authenticate(password=user.password, username=user.username):
+            if user := authenticate(password=user.password, username=user.username):
                 if user.is_active:
                     login(self.request, user)
                     return redirect("home")
@@ -93,12 +91,12 @@ class LoginView(generic.View):
         context = {"email": email, "token": token}
         return render(request, self.template_name, context)
 
-    def post(self, request,email,token):
+    def post(self, request, email, token):
         username = self.request.POST.get("username", None)
         password = self.request.POST.get("password", None)
 
         if not all((username, password)):
-            messages.info(request,"'username' or 'password' should not be null !")
+            messages.info(request, "'username' or 'password' should not be null !")
             return redirect("home")
 
         if user := authenticate(password=password, username=username):
@@ -135,7 +133,7 @@ class ConfirmOtpRegister(generic.View):
         context = {"email": email, "token": token}
         return render(request, self.template_name, context)
 
-    def post(self, request, email,token):
+    def post(self, request, email, token):
         otp = self.request.POST.get("otp", None)
         if not otp:
             messages.info(request, "otp should not be Null.")
@@ -143,7 +141,7 @@ class ConfirmOtpRegister(generic.View):
         token_ = cache.cache.get(email)
         code = "".join([car for car in token if car.isnumeric()][0:4])
         if otp == code:
-            user = User.objects.create_user(self,email=email)
+            user = User.objects.create_user(self, email=email)
             user.save()
             return redirect("register", email)
         messages.info(request, "otp is not correct.")
@@ -154,7 +152,7 @@ class Registeration(generic.View):
     template_name = "auth/register.html"
 
     def get(self, request, email):
-        context ={"email":email}
+        context = {"email": email}
         return render(request, self.template_name, context)
 
     def post(self, request, email):

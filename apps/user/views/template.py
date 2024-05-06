@@ -2,9 +2,9 @@ from utils import cache
 from django.http import response
 from django.views import generic
 from django.shortcuts import get_object_or_404, render
-from django.contrib.auth import get_user_model, login,logout
+from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import UpdateView, DetailView
+from django.views.generic import DetailView
 
 User = get_user_model()
 
@@ -34,18 +34,15 @@ class VerificationView(generic.View):
         return render(request, self.template_name)
 
 
-
 class ProfileView(DetailView, LoginRequiredMixin):
     model = User
-    template_name = 'auth/profile.html'
-    login_url = 'login'
-
+    template_name = "auth/profile.html"
+    login_url = "login"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = context['user']
+        user = context["user"]
         return context
-
 
 
 class LogoutView(generic.RedirectView):

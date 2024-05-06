@@ -22,6 +22,6 @@ urlpatterns = [
         TemplateView.as_view(template_name="auth/send_email.html"),
         name="send_email",
     ),
-    path('profile/<str:slug>/', template.ProfileView.as_view(), name="profile"),
-    path('logout/', template.LogoutView.as_view(), name="logout"),
+    path("profile/<str:slug>/", template.ProfileView.as_view(), name="profile"),
+    path("logout/", template.LogoutView.as_view(), name="logout"),
 ]
