@@ -9,7 +9,7 @@ urlpatterns = [
         name="verification",
     ),
     path("login/", api.SendOtp.as_view(), name="signup/in"),
-    path("login/", api.LoginView.as_view(), name="login"),
+    path("login/<str:email>/<str:token>", api.LoginView.as_view(), name="login"),
     path("login/<str:email>/<str:token>", api.ConfirmOtp.as_view(), name="confirmotp"),
     path(
         "Register/<str:email>/<str:token>",
@@ -22,4 +22,6 @@ urlpatterns = [
         TemplateView.as_view(template_name="auth/send_email.html"),
         name="send_email",
     ),
+    path('profile/<str:slug>/', template.ProfileView.as_view(), name="profile"),
+    path('logout/', template.LogoutView.as_view(), name="logout"),
 ]
