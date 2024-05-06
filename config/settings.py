@@ -126,7 +126,9 @@ else:
 
     CACHES = {
         "default": {
-            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-            "LOCATION": "unique-snowflake",
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": config("REDIS_URL"),
+            "KEY_PREFIX": "imdb",
+            "TIMEOUT": 60 * 2,  # in seconds: 60 * 2 (2 minutes)
         }
     }

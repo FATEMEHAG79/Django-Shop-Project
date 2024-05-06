@@ -13,6 +13,7 @@ django-countries = "^7.6.1"
 coverage = "^7.4.4"
 pillow = "^10.3.0"
 python-decouple = "^3.8"
+redis = "^5.0.4"
 
 
 [tool.poetry.group.dev.dependencies]
