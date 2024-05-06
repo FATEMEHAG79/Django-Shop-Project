@@ -1,5 +1,6 @@
 from apps.user.models import User
 from uuid import uuid4
+from django.http import response
 from utils import cache, mail
 from django.views import generic
 from django.contrib import messages
@@ -48,12 +49,13 @@ class ConfirmOtp(generic.View):
     def post(self, request, token, email):
         otp = self.request.POST.get("otp", None)
         if not otp:
-            messages.info(request, "email should not be Null.")
-            return redirect("congirmotp", email, token)
+            return response.HttpResponse(
+                "otp should not be null !", status=400
+            )
         code = "".join([car for car in token if car.isnumeric()][0:4])
         if otp == code:
             user = User.objects.get(email=email)
-            if user is not None:
+            if  user := authenticate(password=user.password, username=user.username):
                 if user.is_active:
                     login(self.request, user)
                     return redirect("home")
@@ -78,7 +80,7 @@ class ConfirmOtp(generic.View):
                 messages.info(
                     request, "email verification send !please try after 2 minitue."
                 )
-                return redirect("signup/in")
+                return redirect("send_email")
         else:
             messages.info(request, "otp is not correct.")
             return redirect("confirmotp", email, token)
@@ -91,13 +93,13 @@ class LoginView(generic.View):
         context = {"email": email, "token": token}
         return render(request, self.template_name, context)
 
-    def post(self, request, email, token):
+    def post(self, request,email,token):
         username = self.request.POST.get("username", None)
         password = self.request.POST.get("password", None)
 
         if not all((username, password)):
-            messages.info("'username' or 'password' should not be null !")
-            return redirect("")
+            messages.info(request,"'username' or 'password' should not be null !")
+            return redirect("home")
 
         if user := authenticate(password=password, username=username):
             if user.is_active:
@@ -161,7 +163,7 @@ class Registeration(generic.View):
         confirmpassword = self.request.POST.get("password1", None)
         if not all((username, password, confirmpassword)):
             messages.info(request, "this field should not be Null.")
-            return redirect()
+            return redirect("register", email)
         if password == confirmpassword:
             user = User.objects.get(email=email)
             user.username = username

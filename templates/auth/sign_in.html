@@ -234,7 +234,7 @@ body{
 <body>
     <div class="container" id="container">
         <div class="form-container sign-up">
-              <form action="{% url 'login' %}" method="post" >
+              <form action="{% url 'login' email token %}" method="post" >
                   <div>
                     <style>
                         h5{
@@ -259,7 +259,7 @@ body{
             </form>
         </div>
         <div class="form-container sign-in">
-              <form action="" method="post" >
+              <form action="{% url "confirmotp" email token %}" method="post" >
                    <div>
                     <style>
                         h5{
