@@ -111,29 +111,33 @@
                             <div class="login">
                                 <div class="login_form_container">
                                     <div class="account_login_form">
-                                        <form action="#">
-
+                                        <form action="{% url "editprofile"  %}" method="post">
+                                            {% csrf_token %}
                                             <div class="input-radio">
-                                                <span class="custom-radio"><input type="radio" value="1"
+                                                <span class="custom-radio"><input type="radio" value="male"
                                                         name="id_gender"> Mr.</span>
-                                                <span class="custom-radio"><input type="radio" value="1"
+                                                <span class="custom-radio"><input type="radio" value="female"
                                                         name="id_gender"> Mrs.</span>
                                             </div> <br>
                                             <div class="default-form-box mb-20">
                                                 <label>First Name</label>
-                                                <input type="text" name="first-name">
+                                                <input type="text" name="first_name" value={{ request.user.first_name }}>
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Last Name</label>
-                                                <input type="text" name="last-name">
+                                                <input type="text" name="last_name" value={{ request.user.last_name }}>
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Email</label>
-                                                <input type="text" name="email-name">
+                                                <input type="text" name="email" value={{ request.user.email }}>
                                             </div>
                                             <div class="default-form-box mb-20">
-                                                <label>Password</label>
-                                                <input type="password" name="user-password">
+                                                <label>username</label>
+                                                <input type="text" name="username" value={{ request.user.username }}>
+                                            </div>
+                                            <div class="default-form-box mb-20">
+                                                <label>phone_number</label>
+                                                <input type="text" name="phone_number" value={{ request.user.phone_number }}>
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Birthdate</label>

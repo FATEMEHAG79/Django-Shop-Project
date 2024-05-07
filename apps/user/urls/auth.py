@@ -24,4 +24,5 @@ urlpatterns = [
     ),
     path("profile/<str:slug>/", template.ProfileView.as_view(), name="profile"),
     path("logout/", template.LogoutView.as_view(), name="logout"),
+    path("profile/", template.EditProfile.as_view(), name="editprofile"),
 ]
