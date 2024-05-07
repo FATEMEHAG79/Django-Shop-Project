@@ -26,7 +26,7 @@ class User(LogicalMixin, AbstractUser, TimeStampMixin):
     email = models.EmailField(unique=True)
     gender = models.CharField(max_length=48, choices=gender)
     birthday = models.DateTimeField(null=True, blank=True)
-    slug = models.SlugField(max_length=80)
+    slug = models.SlugField(max_length=80, unique=True, blank=True)
     is_active = models.BooleanField(_("active"), default=False)
     phone_number = models.BigIntegerField(
         _("phone_number"),
