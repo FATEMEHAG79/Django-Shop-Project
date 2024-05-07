@@ -157,6 +157,7 @@ class Registeration(generic.View):
 
     def post(self, request, email):
         username = self.request.POST.get("username", None)
+        phone_number = self.request.POST.get("phone_number", None)
         password = self.request.POST.get("password", None)
         confirmpassword = self.request.POST.get("password1", None)
         if not all((username, password, confirmpassword)):
@@ -165,6 +166,7 @@ class Registeration(generic.View):
         if password == confirmpassword:
             user = User.objects.get(email=email)
             user.username = username
+            user.phone_number = phone_number
             user.set_password(password)
             user.save()
             # activate
