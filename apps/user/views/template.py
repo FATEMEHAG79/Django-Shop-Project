@@ -38,7 +38,6 @@ class VerificationView(generic.View):
 class ProfileView(DetailView, LoginRequiredMixin):
     model = User
     template_name = "auth/profile.html"
-    login_url = "login"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
