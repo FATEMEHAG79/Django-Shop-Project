@@ -5,6 +5,7 @@ from django.urls import path, include
 
 urlpatterns = i18n_patterns(
     path("", include("public.urls")),
+    path("", include("apps.order.urls")),
     path("", include("apps.shop.urls")),
     path("", include("apps.user.urls")),
     prefix_default_language=False,
