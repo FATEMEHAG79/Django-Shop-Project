@@ -12,16 +12,18 @@
     <link rel="stylesheet" href="{%static 'css/vendor/vendor.min.css'%}">
     <link rel="stylesheet" href="{%static 'css/plugins/plugins.min.css'%}">
     <link rel="stylesheet" href="{%static 'css/style.min.css'%}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     {% include "header.html" %}
-    <br><br><br><br><br>
+    <br><br>
     {% block content %}
     {% endblock %}
     {% include "footer.html" %}
     <script src="{%static 'js/vendor/vendor.min.js'%}"></script>
     <script src="{%static 'js/plugins/plugins.min.js'%}"></script>
     <script src="{%static 'js/main.js'%}"></script>
+    <script src = "{% static 'js/cart.js' %}"></script>
     {% block extra_scripts %}
     {% endblock extra_scripts %}
 </body>
