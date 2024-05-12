@@ -1,22 +1,40 @@
 from django.db import models
+from utils.filename import maker
 from django.template.defaultfilters import slugify
 from apps.user.models import User
+from apps.core.models import TimeStampMixin, LogicalMixin
+from functools import partial
+from django.core.validators import FileExtensionValidator
 
 
-class Category(models.Model):
-    title = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="media", blank=False)
-    sub_category = models.ForeignKey(
-        "self",
-        on_delete=models.CASCADE,
-        related_name="sub_categories",
-        null=True,
-        blank=True,
+class Media(TimeStampMixin, LogicalMixin):
+    position = models.PositiveIntegerField(null=False)
+    product = models.ForeignKey(
+        "Product", on_delete=models.CASCADE, related_name="media"
     )
-    is_actived = models.BooleanField(default=True)
-    slug = models.SlugField(max_length=200, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now=True)
+    file = models.FileField(
+        upload_to=partial(maker, "product"),
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=["jpeg", "png", "jpg", "gif", "mp4", "avi", "flv"]
+            )
+        ],
+    )
+
+    class Meta:
+        unique_together = ("product", "position")
+
+
+class Category(LogicalMixin, TimeStampMixin):
+    title = models.CharField(max_length=200)
+    image = models.ImageField(upload_to="category", blank=False)
+    parent = models.ForeignKey(
+        "self", related_name="children", on_delete=models.CASCADE, blank=True, null=True
+    )
+    slug = models.SlugField(max_length=200, unique=True, editable=False)
+
+    class Meta:
+        unique_together = ("slug", "parent")
 
     def __str__(self):
         return self.title
@@ -25,23 +43,41 @@ class Category(models.Model):
         self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
 
+    def __str__(self):
+        full_path = [self.title]
+        relate = self.parent
+        while relate is not None:
+            full_path.append(relate.title)
+            relate = relate.parent
+        return "->".join(full_path[::-1])
 
-class Product(models.Model):
+
+class Brand(LogicalMixin, TimeStampMixin):
+    name = models.CharField(max_length=80)
+    image = models.ImageField(upload_to="brands")
+    slug = models.SlugField(max_length=200, unique=True, editable=False)
+    country = models.CharField(max_length=80)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):  # new
+        self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
+
+
+class Product(LogicalMixin, TimeStampMixin):
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="category", null=True
     )
-    image = models.ImageField(upload_to="media")
+    brand = models.ForeignKey(
+        Brand, on_delete=models.CASCADE, related_name="brand", null=True
+    )
     name = models.CharField(max_length=250)
     description = models.TextField()
     price = models.FloatField(default=0)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
-    slug = models.SlugField(unique=True)
-    is_actived = models.BooleanField(default=True)
+    slug = models.SlugField(max_length=50, unique=True, editable=False)
     discount_price = models.FloatField(blank=True, null=True)
-
-    class Meta:
-        ordering = ("-date_created",)
 
     def __str__(self):
         return self.slug
@@ -52,7 +88,7 @@ class Product(models.Model):
 
     @property
     def can_be_added_to_cart(self):
-        return self.is_actived
+        return self.is_active
 
 
 class Comment(models.Model):
