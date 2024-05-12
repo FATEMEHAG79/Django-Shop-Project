@@ -8,10 +8,7 @@ from apps.shop.models import Category
 
 class HomeView(generic.TemplateView):
     def get(self, request):
-        context = {
-            "subcategory": Category.objects.filter(is_active=True, main=True),
-            "category": Category.objects.filter(is_active=True, main=False),
-        }
+        context = {"category": Category.objects.filter(parent=None)}
         return render(request, "public/home.html", context)
 
 
