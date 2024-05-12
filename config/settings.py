@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     # Application
     *list(map(lambda app: f"apps.{app}", APPLICATIONS)),
 ]
@@ -83,6 +84,7 @@ INSTALLED_APPS = [
 STATIC_URL = "static/"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+APPEND_SLASH = False
 
 # Mode Handling:
 if DEBUG:
