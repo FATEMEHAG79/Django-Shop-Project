@@ -12,7 +12,9 @@
                         <div class="product-large-image product-large-image-horaizontal swiper-container">
                             <div class="swiper-wrapper">
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
-                                    <img src="assets/images/product/default/home-1/default-1.jpg" alt="">
+                                   {% for m in media %}
+                                                        <img src="{{ m.file.url }}">
+                                                            {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -22,8 +24,10 @@
                             class="product-image-thumb product-image-thumb-horizontal swiper-container pos-relative mt-5">
                             <div class="swiper-wrapper">
                                 <div class="product-image-thumb-single swiper-slide">
-                                    <img class="img-fluid" src="assets/images/product/default/home-1/default-1.jpg"
+                                    {% for m in media %}
+                                    <img class="img-fluid" src="{{ media.file.url}}"
                                         alt="">
+                                    {% endfor %}
                                 </div>
 
                             </div>
@@ -34,6 +38,7 @@
                         <!-- End Thumbnail Image -->
                     </div>
                 </div>
+                
                 <div class="col-xl-7 col-lg-6">
                     <div class="product-details-content-area product-details--golden" data-aos="fade-up"
                         data-aos-delay="200">

@@ -1,7 +1,7 @@
 {%extends 'base.html'%}
 {% block content %}
 {%load static%}
-    <br><br><br><br><br>
+<br><br><br><br>
 <!-- ...::::  z Start Shop Section:::... -->
 <div class="shop-section">
 <div class="container">
@@ -153,7 +153,9 @@
                                                 data-aos="fade-up" data-aos-delay="200">
                                                 <div class="image-box">
                                                     <a href="{% url "productdetail" product.category.slug product.slug %}" class="image-link">
-                                                        <img src="{% static "images/icon_about2.jpg"%}">
+                                                        {% for m in media %}
+                                                        <img src="{{ m.file.url }}">
+                                                            {% endfor %}
 
                                                     </a>
                                                     <div class="action-link">
@@ -216,7 +218,9 @@
                                                 </a>
                                                 <div class="product-list-content">
                                                     <h5 class="product-list-link"><a
-                                                            href="{% url "productdetail" product.category.slug product.slug %}">{{ product.name}}</a></h5>
+                                                            href="{% url "productdetail" product.category.slug product.slug %}">{{ product.name}}{% for m in media %}
+                                                        <img src="{{ m.file.url }}" style="width: 200px">
+                                                            {% endfor %}</a></h5>
                                                     <ul class="review-star">
                                                         <li class="fill"><i class="ion-android-star"></i></li>
                                                         <li class="fill"><i class="ion-android-star"></i></li>
@@ -230,7 +234,7 @@
                                                     <div class="product-action-icon-link-list">
                                                         <a
                                                             class="btn btn-lg btn-black-default-hover"  href="{% url "productdetail" product.category.slug product.slug %}">View Detail</a>
-                                                        <a href="#" data-bs-toggle="modal"
+                                                        <a href="" data-bs-toggle="modal"
                                                             data-bs-target="#modalQuickview"
                                                             class="btn btn-lg btn-black-default-hover"><i
                                                                 class="icon-magnifier"></i></a>

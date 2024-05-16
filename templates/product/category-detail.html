@@ -16,7 +16,7 @@
                             <div class="swiper-wrapper">
                                 <!-- Start Company Logo Single Item -->
                                 {% for item in itemcategory %}
-                                    <a href="{% url "subcategorydetail" item.parent.slug item.slug %}">{{ item.title }}</a>
+                                    <a href="{% url "subcategorydetail" item.parent.slug item.slug %}">{{ item.title }}<img src="{{ item.image.url }}"></a>
                                 <div class="company-logo-single-item swiper-slide">
                                     <div class="image"><img class="img-fluid" src="{{item.image}}" alt=""></div>
                                 </div>
@@ -185,7 +185,9 @@
                                                 data-aos="fade-up" data-aos-delay="200">
                                                 <div class="image-box">
                                                     <a href="{% url "productdetail" product.category.slug product.slug %}" class="image-link">
-                                                        <img src="{% static "images/icon_about2.jpg"%}">
+                                                        {% for m in media %}
+                                                        <img src="{{ m.file.url }}">
+                                                            {% endfor %}
 
                                                     </a>
                                                     <div class="action-link">
@@ -248,7 +250,9 @@
                                                 </a>
                                                 <div class="product-list-content">
                                                     <h5 class="product-list-link"><a
-                                                            href="{% url "productdetail" product.category.slug product.slug %}">{{ product.name}}</a></h5>
+                                                            href="{% url "productdetail" product.category.slug product.slug %}">{{ product.name}}{% for m in media %}
+                                                        <img src="{{ m.file.url }}" style="width: 200px">
+                                                            {% endfor %}</a></h5>
                                                     <ul class="review-star">
                                                         <li class="fill"><i class="ion-android-star"></i></li>
                                                         <li class="fill"><i class="ion-android-star"></i></li>
