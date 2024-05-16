@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser,Group
 from django.core.validators import RegexValidator
 from django.db import models
 from django.template.defaultfilters import slugify
@@ -22,6 +22,7 @@ class User(LogicalMixin, AbstractUser, TimeStampMixin):
         null=True,
         blank=True,
     )
+    groups = models.ForeignKey(Group,on_delete=models.CASCADE,blank=True,null=True)
     email = models.EmailField(unique=True)
     gender = models.CharField(max_length=48, choices=gender)
     birthday = models.DateTimeField(null=True, blank=True)
