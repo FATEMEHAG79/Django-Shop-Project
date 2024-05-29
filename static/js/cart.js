@@ -62,4 +62,31 @@ $(document).ready(function (){
             }
         })
     })
+    $("#update-item-product").on("click",function () {
+    let item_id = $(this).attr("data-product")
+    let this_val = $(this)
+    let item_quantity=$(".product-qty-"+item_id).val()
+
+    console.log("item_id:", item_id);
+    console.log("qty:", item_quantity);
+
+    $.ajax(
+        {
+            url: "/update-product/",
+            data: {
+                "id": item_id,
+                "qty":item_quantity
+            },
+            dataType: "json",
+            beforeSend: function () {
+                this_val.hide()
+            },
+            success: function (response) {
+                this_val.show()
+                $(".cart-items-count").text(response.totalcartitems)
+                $("#cart-list").html(response.data)
+
+            }
+        })
+    })
 })
