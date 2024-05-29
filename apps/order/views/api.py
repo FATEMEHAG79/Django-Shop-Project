@@ -83,6 +83,8 @@ class DeleteItemCart(APIView):
                 product = Product.objects.get(id=p_id)
                 item["slug_category"] = product.category.slug
                 item["slug"] = product.slug
+                media_files = Media.objects.filter(product=product)
+                item["media"] = [{"url":media.file.url}for media in media_files]
                 cart_total_amount += int(item["qty"]) * float(item["price"])
             cart_data = request.session["cart_data_obj"]
             total_cart_items = sum(
@@ -97,7 +99,8 @@ class DeleteItemCart(APIView):
                 {
                     "data" : context,
                     "totalcartitems": sum(
-                    item["qty"] for item in request.session["cart_data_obj"].values())
+                    item["qty"] for item in request.session["cart_data_obj"].values()),
+                    "cart_total_amount": cart_total_amount,
                 }
             )
         else:

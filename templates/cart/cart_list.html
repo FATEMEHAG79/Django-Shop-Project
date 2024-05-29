@@ -29,10 +29,10 @@
                                     <button  class="btn btn-block btn-lg btn-black-default-hover"
                                          id="delete-item-product" data-product="{{ id }}"><i class="fa fa-trash-o"></i></button>
                                 </td>
-                                <td class="product_thumb">{% for image in media_file %}
+                                <td class="product_thumb">{% for image in item.media %}
                                     <a href="{% url "productdetail" item.slug_category item.slug %}" style="width: 20px;height: 20px;">
                                         <img
-                                            src="{{ image.file.url }}"
+                                            src="{{ image.url }}"
                                             alt=""></a>{% endfor %}</td>
                                 <td class="product_name"><a href="{% url "productdetail" item.slug_category item.slug %}">{{ item.name }}</a></td>
                                 <td class="product-price">${{ item.price }}</td>
