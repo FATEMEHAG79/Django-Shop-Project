@@ -185,7 +185,7 @@
                                                 data-aos="fade-up" data-aos-delay="200">
                                                 <div class="image-box">
                                                     <a href="{% url "productdetail" product.category.slug product.slug %}" class="image-link">
-                                                        {% for m in media %}
+                                                        {% for m in product.media.all %}
                                                         <img src="{{ m.file.url }}">
                                                             {% endfor %}
 
