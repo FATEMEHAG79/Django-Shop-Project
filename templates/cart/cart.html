@@ -15,6 +15,7 @@
                         <!-- Start Cart Table Head -->
                         <thead>
                             <tr>
+                                <th class="product_remove">Update</th>
                                 <th class="product_remove">Delete</th>
                                 <th class="product_thumb">Image</th>
                                 <th class="product_name">Product</th>
@@ -27,6 +28,10 @@
                             <!-- Start Cart Single Item-->
                             {% for id,item in cart_data.items %}
                             <tr>
+                             <td class="product_remove">
+                                    <button  class="btn btn-block btn-lg btn-black-default-hover"
+                                         id="update-item-product" data-product="{{ id }}"><i class="fa fa-refresh"></i></button>
+                                </td>
                                 <td class="product_remove">
                                     <button  class="btn btn-block btn-lg btn-black-default-hover"
                                          id="delete-item-product" data-product="{{ id }}"><i class="fa fa-trash-o"></i></button>
@@ -39,16 +44,13 @@
                                 <td class="product_name"><a href="{% url "productdetail" item.slug_category item.slug %}">{{ item.name }}</a></td>
                                 <td class="product-price">${{ item.price }}</td>
                                 <td class="product_quantity"><label>Quantity</label> <input min="1"
-                                        max="100" value="{{ item.qty }}" type="number"></td>
+                                        max="100" value="{{ item.qty }}" type="number" class="product-qty-{{ id }}"></td>
                                 <td class="product_total">${{ item.totla_price }}</td>
                             </tr> <!-- End Cart Single Item-->
                             {% endfor %}
                             <!-- Start Cart Single Item-->
                         </tbody>
                     </table>
-                </div>
-                <div class="cart_submit">
-                    <button class="btn btn-md btn-golden" type="submit">update cart</button>
                 </div>
             </div>
         </div>
@@ -57,20 +59,10 @@
 </div> <!-- End Cart Table -->
 
 <!-- Start Coupon Start -->
-<div class="coupon_area">
+<div class="cart-table-wrapper" data-aos="fade-up" data-aos-delay="0">
 <div class="container">
     <div class="row">
-        <div class="col-lg-6 col-md-6">
-            <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
-                <h3>Coupon</h3>
-                <div class="coupon_inner">
-                    <p>Enter your coupon code if you have one.</p>
-                    <input class="mb-2" placeholder="Coupon code" type="text">
-                    <button type="submit" class="btn btn-md btn-golden">Apply coupon</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 col-md-6">
+        <div class="table_page table-responsive">
             <div class="coupon_code right" data-aos="fade-up" data-aos-delay="400">
                 <h3>Cart Totals</h3>
                 <div class="coupon_inner">

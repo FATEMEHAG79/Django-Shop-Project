@@ -13,6 +13,7 @@
                         <!-- Start Cart Table Head -->
                         <thead>
                             <tr>
+                                <th class="product_remove">Update</th>
                                 <th class="product_remove">Delete</th>
                                 <th class="product_thumb">Image</th>
                                 <th class="product_name">Product</th>
@@ -25,6 +26,10 @@
                             <!-- Start Cart Single Item-->
                             {% for id,item in cart_data.items %}
                             <tr>
+                             <td class="product_remove">
+                                    <button  class="btn btn-block btn-lg btn-black-default-hover"
+                                         id="update-item-product" data-product="{{ id }}"><i class="fa fa-refresh"></i></button>
+                                </td>
                                 <td class="product_remove">
                                     <button  class="btn btn-block btn-lg btn-black-default-hover"
                                          id="delete-item-product" data-product="{{ id }}"><i class="fa fa-trash-o"></i></button>
@@ -37,16 +42,13 @@
                                 <td class="product_name"><a href="{% url "productdetail" item.slug_category item.slug %}">{{ item.name }}</a></td>
                                 <td class="product-price">${{ item.price }}</td>
                                 <td class="product_quantity"><label>Quantity</label> <input min="1"
-                                        max="100" value="{{ item.qty }}" type="number"></td>
+                                        max="100" value="{{ item.qty }}" type="number" class="product-qty-{{ id }}"></td>
                                 <td class="product_total">${{ item.totla_price }}</td>
                             </tr> <!-- End Cart Single Item-->
                             {% endfor %}
                             <!-- Start Cart Single Item-->
                         </tbody>
                     </table>
-                </div>
-                <div class="cart_submit">
-                    <button class="btn btn-md btn-golden" type="submit">update cart</button>
                 </div>
             </div>
         </div>
