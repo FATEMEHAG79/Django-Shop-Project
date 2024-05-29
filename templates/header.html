@@ -361,13 +361,16 @@
         {% else %}
                 <img src="{% static "images/empty-cart/empty-cart.png" %}" alt=""
                                 class="offcanvas-cart-image">
+            
         {% endif %}
-        
+
             <ul class="offcanvas-cart-action-button">
                      {% if cart_data.items %}
                 <li><a href="{% url "cart" %}" class="btn btn-block btn-golden">View Cart</a></li>
                 {% else %}
-                         <br><br><br>
+                         <br><br>
+                         <pre class="title" style="color: #bda685;font-size: 20px">     Your Cart is Empty!</pre>
+                         <br>
                          <li><a href="{% url "home" %}" class="btn btn-block btn-golden">SHOPPING</a></li>
                 {% endif %}
             </ul>
