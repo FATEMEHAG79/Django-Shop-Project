@@ -1,4 +1,4 @@
-from apps.shop.models import Category, Brand, Product
+from apps.shop.models import Category, Brand, Product,Media
 
 
 def myquery(request):
@@ -15,12 +15,15 @@ def myquery(request):
         product = Product.objects.get(id=p_id)
         item["slug_category"] = product.category.slug
         item["slug"] = product.slug
+        media_files=Media.objects.filter(product=product)
+        item["media"]=media_files
         cart_total_amount += int(item["qty"]) * float(item["price"])
     cart_data = request.session["cart_data_obj"]
     context = {
         "category": Category.objects.filter(parent=None),
         "totalcartitems": totalcartitems,
         "cart_data": cart_data,
+        "cart_total_amount": cart_total_amount,
         "brands" : Brand.objects.all()
     }
     return context

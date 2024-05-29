@@ -327,52 +327,49 @@
 
         <!-- Start  Offcanvas Addcart Wrapper -->
         <div class="offcanvas-add-cart-wrapper">
+        {% if  cart_data.items %}
             <h4 class="offcanvas-title">Shopping Cart</h4>
             <ul class="offcanvas-cart">
-
+                 {% for id,item in cart_data.items %}
                 <li class="offcanvas-cart-item-single">
                     <div class="offcanvas-cart-item-block">
-                        <a href="#" class="offcanvas-cart-item-image-link">
-                            <img src="" alt=""
+                        {% for image in item.media %}
+                        <a href="{% url "productdetail" item.slug_category item.slug %}" class="offcanvas-cart-item-image-link">
+                            <img src="{{ image.file.url }}" alt=""
                                 class="offcanvas-cart-image">
                         </a>
+                            {% endfor %}
                         <div class="offcanvas-cart-item-content">
-                            <a href="#" class="offcanvas-cart-item-link">Car Vails</a>
+                            <a href="{% url "productdetail" item.slug_category item.slug %}" class="offcanvas-cart-item-link">{{ item.name}}</a>
                             <div class="offcanvas-cart-item-details">
-                                <span class="offcanvas-cart-item-details-quantity">3 x </span>
-                                <span class="offcanvas-cart-item-details-price">$500.00</span>
+                                <span class="offcanvas-cart-item-details-quantity">{{ item.qty }} x </span>
+                                <span class="offcanvas-cart-item-details-price">${{ item.price }}</span>
+                                <span class="offcanvas-cart-item-details-price">     =${{ item.totla_price }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="offcanvas-cart-item-delete text-right">
-                        <a href="#" class="offcanvas-cart-item-delete"><i class="fa fa-trash-o"></i></a>
+                        <a href="#" class="offcanvas-cart-item-delete"></a>
                     </div>
                 </li>
-                <li class="offcanvas-cart-item-single">
-                    <div class="offcanvas-cart-item-block">
-                        <a href="#" class="offcanvas-cart-item-image-link">
-                            <img src="" alt=""
-                                class="offcanvas-cart-image">
-                        </a>
-                        <div class="offcanvas-cart-item-content">
-                            <a href="#" class="offcanvas-cart-item-link">Shock Absorber</a>
-                            <div class="offcanvas-cart-item-details">
-                                <span class="offcanvas-cart-item-details-quantity">1 x </span>
-                                <span class="offcanvas-cart-item-details-price">$350.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="offcanvas-cart-item-delete text-right">
-                        <a href="#" class="offcanvas-cart-item-delete"><i class="fa fa-trash-o"></i></a>
-                    </div>
-                </li>
-            </ul>
+                {% endfor %}
+                     </ul>
             <div class="offcanvas-cart-total-price">
                 <span class="offcanvas-cart-total-price-text">Subtotal:</span>
-                <span class="offcanvas-cart-total-price-value">$170.00</span>
+                <span class="offcanvas-cart-total-price-value">${{ cart_total_amount}}</span>
             </div>
+        {% else %}
+                <img src="{% static "images/empty-cart/empty-cart.png" %}" alt=""
+                                class="offcanvas-cart-image">
+        {% endif %}
+        
             <ul class="offcanvas-cart-action-button">
+                     {% if cart_data.items %}
                 <li><a href="{% url "cart" %}" class="btn btn-block btn-golden">View Cart</a></li>
+                {% else %}
+                         <br><br><br>
+                         <li><a href="{% url "home" %}" class="btn btn-block btn-golden">SHOPPING</a></li>
+                {% endif %}
             </ul>
         </div> <!-- End  Offcanvas Addcart Wrapper -->
     </div> <!-- End  Offcanvas Addcart Section -->
