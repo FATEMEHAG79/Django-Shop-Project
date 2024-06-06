@@ -7,7 +7,7 @@ from apps.core.models import TimeStampMixin, LogicalMixin
 from django.utils.translation import gettext_lazy as _
 
 
-gender = [("f", "female"), ("m", "mail")]
+gender = [("femail", "female"), ("mail", "mail")]
 
 
 class User(LogicalMixin, AbstractUser, TimeStampMixin):
@@ -54,50 +54,24 @@ class User(LogicalMixin, AbstractUser, TimeStampMixin):
         return full_name.strip()
 
 
-class Address(models.Model):
-    zip_cod_validator = RegexValidator(
-        r"\b(?!(\d)\1{3})[13-9]{4}[1346-9][013-9]{5}\b", "not valid zip code."
-    )
-    IRANIAN_PROVINCES = [
-        ("alborz", "البرز"),
-        ("ardabil", "اردبیل"),
-        ("east_azarbaijan", "آذربایجان شرقی"),
-        ("west_azarbaijan", "آذربایجان غربی"),
-        ("bushehr", "بوشهر"),
-        ("chaharmahal_and_bakhtiari", "چهارمحال و بختیاری"),
-        ("fars", "فارس"),
-        ("gilan", "گیلان"),
-        ("golestan", "گلستان"),
-        ("hamadan", "همدان"),
-        ("hormozgan", "هرمزگان"),
-        ("ilam", "ایلام"),
-        ("isfahan", "اصفهان"),
-        ("kerman", "کرمان"),
-        ("kermanshah", "کرمانشاه"),
-        ("khorasan_razavi", "خراسان رضوی"),
-        ("khuzestan", "خوزستان"),
-        ("kohgiluyeh_and_boyer-ahmad", "کهگیلویه و بویراحمد"),
-        ("kordestan", "کردستان"),
-        ("lorestan", "لرستان"),
-        ("markazi", "مرکزی"),
-        ("mazandaran", "مازندران"),
-        ("north_khorasan", "خراسان شمالی"),
-        ("qazvin", "قزوین"),
-        ("qom", "قم"),
-        ("semnan", "سمنان"),
-        ("sistan_and_baluchestan", "سیستان و بلوچستان"),
-        ("south_khorasan", "خراسان جنوبی"),
-        ("tehran", "تهران"),
-        ("yazd", "یزد"),
-        ("zanjan", "زنجان"),
-    ]
-    province = models.CharField(max_length=50, choices=IRANIAN_PROVINCES)
+class Address(LogicalMixin, TimeStampMixin):
+    province = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     apartment_address = models.CharField(max_length=100)
-    zip = models.CharField(max_length=48, validators=[zip_cod_validator])
+    zip = models.CharField(max_length=50)
+    first_name_recivier= models.CharField(max_length=50)
+    last_name_recivier  = models.CharField(max_length=50)
+    phone_number_reciver = models.BigIntegerField(
+        validators=[RegexValidator(r"^989[0-3,9]\d{8}$")],
+        error_messages={"unique": ("A user with mobile number already exists")},
+        null=True,blank=True
+    )
 
     def __str__(self):
         return self.user.username
 
+
     class Meta:
         verbose_name_plural = "Addresses"
+
+
