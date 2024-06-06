@@ -155,17 +155,21 @@
                                             successfully!</div>
                                         <div class="modal-add-cart-product-cart-buttons">
                                             <a href="{% url 'cart' %}">View Cart</a>
-                                            <a href="checkout.html">Checkout</a>
+                                               {% if user.is_authenticated %}
+                                            <a href="{% url "checkout" request.user.slug %}">Checkout</a>
+                                            {% else %}
+                                            <a href="{%url 'signup/in'%}">Checkout</a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-5 modal-border">
                                 <ul class="modal-add-cart-product-shipping-info">
-                                    <li> <strong><i class="icon-shopping-cart"></i> There Are 5 Items In Your
+                                    <li> <strong><i class="icon-shopping-cart"></i> There Are {{totalcartitems}} Items In Your
                                             Cart.</strong></li>
-                                    <li> <strong>TOTAL PRICE: </strong> <span>$187.00</span></li>
-                                    <li class="modal-continue-button"><a href="#" data-bs-dismiss="modal">CONTINUE
+                                    <li> <strong>TOTAL PRICE: </strong> <span>${{ cart_total_amount}}</span></li>
+                                    <li class="modal-continue-button"><a href="" data-bs-dismiss="modal">CONTINUE
                                             SHOPPING</a></li>
                                 </ul>
                             </div>
