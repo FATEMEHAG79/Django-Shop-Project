@@ -1,11 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer
-from apps.order.models import Product
-from apps.user.models import Address
+from apps.order.models import Order,OrderItem,Product
+from apps.user.models import Address,User
 from apps.order.serializers import AdressSerialiser
 from rest_framework.permissions import IsAuthenticated
 from apps.shop.models import Media
@@ -233,3 +233,45 @@ class EditAddress(APIView):
 #             return redirect('checkout', slug=request.user.slug)
 #         else:
 #             return Response(serializer.errors, status=400)
+
+
+
+
+
+class PlaceOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "cart/order-end.html"
+
+    def get(self, request, *args, **kwargs):
+        cart_data = request.session.get("cart_data_obj", {})
+        user = request.user
+        order = Order.objects.create(user=user)
+        for product_id, item_info in cart_data.items():
+            product = get_object_or_404(Product, pk=product_id)
+            quantity = item_info.get("qty", 1)
+            order_item = OrderItem.objects.create(
+                order=order,
+                item=product,
+                quantity=quantity,
+            )
+        del request.session["cart_data_obj"]
+        return Response(
+            {
+                "id":order.id
+            }
+        )
+
+
+
+class ConfirmOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        try:
+            order = Order.objects.get(pk=id)
+        except Order.DoesNotExist:
+            return Response({"error": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
+        order.status = True
+        order.save()
+        return render(request, "cart/shop_end.html")
