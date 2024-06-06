@@ -68,8 +68,10 @@ class EditProfile(generic.RedirectView):
         last_name = self.request.POST.get("last_name")
         email = self.request.POST.get("email")
         phone_number = self.request.POST.get("phone_number")
+        gender=self.request.POST.get("gender")
         data = {
             "first_name": first_name,
+            "gender":gender,
             "last_name": last_name,
             "email": email,
             "phone_number": phone_number,
