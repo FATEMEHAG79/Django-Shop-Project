@@ -142,7 +142,7 @@
                             </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
-                        <form action="#">
+                        <div >
                             <h3>Your order</h3>
                             <div class="order_table table-responsive">
                                 <table>
@@ -177,11 +177,11 @@
                             </div>
                             <div class="payment_method">
                                 <div class="order_button pt-3">
-                                    <button class="btn btn-md btn-black-default-hover" type="submit">Proceed to
-                                        PayPal</button>
+                                    <a href="{% url "order"  %}"><button class="btn btn-md btn-black-default-hover" >Proceed to
+                                        PayPal</button></a>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div> <!-- Start User Details Checkout Form -->
