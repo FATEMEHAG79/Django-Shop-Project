@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer
 from apps.order.models import Product
+from apps.user.models import Address
+from apps.order.serializers import AdressSerialiser
+from rest_framework.permissions import IsAuthenticated
 from apps.shop.models import Media
+from django.shortcuts import redirect
 
 
 class AddToCartAPI(APIView):
@@ -147,3 +152,84 @@ class UpdateItemCart(APIView):
             )
         else:
             return render(request, template_name="cart/cart-empty.html")
+
+
+
+
+class Checkout(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "cart/checkout.html"
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        if len(request.session.get("cart_data_obj", [])):
+            user = request.user
+            address = Address.objects.filter(user=user)
+            serializer = AdressSerialiser(address, many=True)
+            return Response({"address": serializer.data})
+        else:
+            return render(request, "cart/cart-empty.html")
+
+
+
+class EditAddress(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "cart/checkout.html"
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        address = Address.objects.filter(user=user)
+        serializer = AdressSerialiser(address, many=True)
+        return Response({"address": serializer.data})
+
+    def post(self, request, *args, **kwargs):
+        address_id = request.data.get("address_id")
+        data = {
+            "first_name_recivier": request.data.get("first_name_recivier"),
+            "last_name_recivier": request.data.get("last_name_recivier"),
+            "phone_number_reciver": request.data.get("phone_number_reciver"),
+            "apartment_address": request.data.get("apartment_address"),
+            "province": request.data.get("province")
+        }
+        try:
+            address = Address.objects.get(id=address_id)
+            serializer = AdressSerialiser(address, data=data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return redirect('checkout', slug=request.user.slug)
+            else:
+                return Response(serializer.errors, status=400)
+        except Address.DoesNotExist:
+            return Response({"error": "Address not found"}, status=404)
+
+
+
+
+# class CreateAddress(APIView):
+#     renderer_classes = [TemplateHTMLRenderer]
+#     template_name = "cart/checkout.html"
+#     permission_classes = [IsAuthenticated]
+#
+#     def get(self, request, *args, **kwargs):
+#         user = request.user
+#         address = Address.objects.filter(user=user)
+#         serializer = AdressSerialiser(address, many=True)
+#         return Response({"address": serializer.data})
+#
+#     def post(self, request, *args, **kwargs):
+#         user = request.user
+#         data = {
+#             "user": user.id,
+#             "first_name_recivier": request.data.get("first_name_recivier"),
+#             "last_name_recivier": request.data.get("last_name_recivier"),
+#             "phone_number_reciver": request.data.get("phone_number_reciver"),
+#             "apartment_address": request.data.get("apartment_address"),
+#             "province": request.data.get("province")
+#         }
+#         serializer = AdressSerialiser(data=data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return redirect('checkout', slug=request.user.slug)
+#         else:
+#             return Response(serializer.errors, status=400)
