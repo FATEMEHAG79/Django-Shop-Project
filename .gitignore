@@ -6,6 +6,7 @@ __pycache__/
 # C extensions
 *.so
 
+tmp/cash/
 # Distribution / packaging
 .Python
 build/
@@ -164,3 +165,12 @@ cython_debug/
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/modules.xml
 /.idea/misc.xml
+/.idea/project.iml
+/.idea/vcs.xml
+/.idea/dataSources.xml
+/tmp/cache/b63308b9508bfb2159364ade672c43aa.djcache
+/tmp/cache/7afe15b9a2efa507adff7469558fab19.djcache
+/tmp/cache/1a083351bb20bc60d8e614b9f43b2f1c.djcache
+/tmp/cache/2f2b77c1218a0abe588fc1ee215ea59b.djcache
+/tmp/cache/2eb89d85b74024299afeda49f9dac86d.djcache
+/tmp/cache/2a0d920e947eb2c8a8f9c5f4200cddc8.djcache
