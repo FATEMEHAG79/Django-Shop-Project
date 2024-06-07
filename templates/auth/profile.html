@@ -14,9 +14,9 @@
                                     class="nav-link btn btn-block btn-md btn-black-default-hover active">Dashboard</a>
                             </li>
                             <li> <a href="#orders" data-bs-toggle="tab"
-                                    class="nav-link btn btn-block btn-md btn-black-default-hover">Orders</a></li>
+                                    class="nav-link btn btn-block btn-md btn-black-default-hover">Orders completed</a></li>
                             <li><a href="#downloads" data-bs-toggle="tab"
-                                    class="nav-link btn btn-block btn-md btn-black-default-hover">Downloads</a></li>
+                                    class="nav-link btn btn-block btn-md btn-black-default-hover">order incompleted</a></li>
                             <li><a href="#address" data-bs-toggle="tab"
                                     class="nav-link btn btn-block btn-md btn-black-default-hover">Addresses</a></li>
                             <li><a href="#account-details" data-bs-toggle="tab"
@@ -42,28 +42,21 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Order</th>
                                             <th>Date</th>
-                                            <th>Status</th>
-                                            <th>Total</th>
-                                            <th>Actions</th>
+                                            <th>status</th>
+                                            <th>detail</th>
+                                            <th>Total amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    {% for i in order_completed %}
                                         <tr>
-                                            <td>1</td>
-                                            <td>May 10, 2018</td>
-                                            <td><span class="success">Completed</span></td>
-                                            <td>$25.00 for 1 item </td>
-                                            <td><a href="cart.html" class="view">view</a></td>
+                                            <td>{{ i.ordered_date}}</td>
+                                            <td><span class="success">{{ i.status }}</span></td>
+                                            <td>{% for it in i.items.all %}<p>{{ it.item.name }}-->{{ it.item.price }}*{{it.quantity }}={{ it.get_final_price }}</p>{% endfor %}</td>
+                                            <td><a href="" class="view">{{ i.get_total }}</a></td>
                                         </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>May 10, 2018</td>
-                                            <td>Processing</td>
-                                            <td>$17.00 for 1 item </td>
-                                            <td><a href="cart.html" class="view">view</a></td>
-                                        </tr>
+                                    {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -74,25 +67,21 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Product</th>
-                                            <th>Downloads</th>
-                                            <th>Expires</th>
-                                            <th>Download</th>
+                                            <th>Date</th>
+                                            <th>status</th>
+                                            <th>detail</th>
+                                            <th>Total amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                         {% for io in order_incompleted %}
                                         <tr>
-                                            <td>Shopnovilla - Free Real Estate PSD Template</td>
-                                            <td>May 10, 2018</td>
-                                            <td><span class="danger">Expired</span></td>
-                                            <td><a href="#" class="view">Click Here To Download Your File</a></td>
+                                            <td>{{ io.ordered_date}}</td>
+                                            <td><span class="success">{{ io.status }}</span></td>
+                                            <td>{% for itl in io.items.all %}<p>{{ itl.item.name }}-->{{ itl.item.price }}*{{itl.quantity }}={{ itl.get_final_price }}</p>{% endfor %}</td>
+                                            <td><a href="" class="view">{{ io.get_total }}</a></td>
                                         </tr>
-                                        <tr>
-                                            <td>Organic - ecommerce html template</td>
-                                            <td>Sep 11, 2018</td>
-                                            <td>Never</td>
-                                            <td><a href="#" class="view">Click Here To Download Your File</a></td>
-                                        </tr>
+                                    {% endfor %}
                                     </tbody>
                                 </table>
                             </div>

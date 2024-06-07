@@ -1,3 +1,4 @@
+from apps.order.models import Order
 from utils import cache
 from django.http import response
 from django.views import generic
@@ -42,6 +43,10 @@ class ProfileView(DetailView, LoginRequiredMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = context["user"]
+        order_completed=Order.objects.filter(user=user,status=True)
+        order_incompleted = Order.objects.filter(user=user, status=False)
+        context["order_completed"]=order_completed
+        context["order_incompleted"] = order_incompleted
         return context
 
 
