@@ -24,8 +24,8 @@ class Order(models.Model):
         total = 0
         for order_item in self.items.all():
             total += order_item.get_final_price()
-        if self.coupon:
-            total -= self.coupon.amount
+        # if self.coupon:
+        #     total -= self.coupon.amount
         return total
 
 
@@ -34,7 +34,7 @@ class OrderItem(models.Model):
     item = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, default=None
+        Order, on_delete=models.CASCADE, default=None,related_name="items"
     )  # Add default=None here
 
     def __str__(self):
