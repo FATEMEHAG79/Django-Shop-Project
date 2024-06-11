@@ -22,6 +22,9 @@
                             <li><a href="#account-details" data-bs-toggle="tab"
                                     class="nav-link btn btn-block btn-md btn-black-default-hover">Account details</a>
                             </li>
+                            <li><a href="#activate" data-bs-toggle="tab"
+                                    class="nav-link btn btn-block btn-md btn-black-default-hover">Activate Accountt</a>
+                            </li>
                             <li><a href="{% url "logout" %}"
                                     class="nav-link btn btn-block btn-md btn-black-default-hover">logout</a></li>
                         </ul>
@@ -140,6 +143,19 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    <div class="tab-pane" id="activate">
+                        {% if user.is_active %}
+                            <p>your account was actived.</p>
+                        {% else %}
+                            <form action="{% url "activeprofile" %}" method="post">
+                            {% csrf_token %}
+                             <p>your account is not actived.please active now.</p>
+                            <button class="btn btn-md btn-black-default-hover"
+                                                    type="submit">ACTIVE ACCOUNT</button>
+                            </form>
+                        {% endif %}
+
                         </div>
                     </div>
                 </div>
