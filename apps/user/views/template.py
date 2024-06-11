@@ -2,14 +2,14 @@ from uuid import uuid4
 from apps.order.models import Order
 from utils import cache
 from django.http import response
-from django.views import generic
+from django.views import generic, View
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from utils import mail
 from django.shortcuts import redirect
-from django.http import JsonResponse
+from django.http import HttpResponse
 
 User = get_user_model()
 
@@ -86,7 +86,9 @@ class EditProfile(generic.RedirectView):
             "username": username,
         }
         User.objects.filter(email=email).update(**data)
-        return redirect("profile", User.objects.get(email=email).slug)
+        login(self.request, request.user)
+        success = " change succeddfully."
+        return HttpResponse(success)
 
 
 class ActivateProfile(generic.RedirectView):
@@ -121,13 +123,68 @@ class Changepassword(generic.RedirectView):
         newpassword = self.request.POST.get("newpassword")
         newconfirmpassword = self.request.POST.get("newconfirmpassword")
         if user.check_password(password):
-            if newpassword==newconfirmpassword:
+            if newpassword == newconfirmpassword:
                 user.set_password(newpassword)
                 user.save()
-                return JsonResponse({"success":True,"message":"password change succeddfully." })
+                login(self.request, user)
+                success = "password change succeddfully."
+                return HttpResponse(success)
             else:
-                return JsonResponse({"success": False, "message": "password and new password not match."})
+                success = "password and new password not match."
+                return HttpResponse(success)
         else:
-            return JsonResponse({"success": False, "message": "back password is not correct."})
+            success = "back password is not correct."
+            return HttpResponse(success)
 
 
+class ForgotPassword(LoginRequiredMixin, View):
+    def post(self, request):
+        user = request.user
+        if not cache.get_or_create(
+            f"activate_token_user_{user.username}", lambda: uuid4().hex, 180
+        ):
+            # send mail !
+            mail.send_mail(
+                f"Verification {user.username}",
+                user.email,
+                "auth/forgot_password.html",
+                {
+                    "user": user,
+                    "token": cache.cache.get(f"activate_token_user_{user.username}"),
+                    "host": self.request.get_host(),
+                },
+            )
+            login(self.request, user)
+            return redirect("email-change-password")
+        return response.HttpResponse("THE LINK HAS BEEN PREVIOSLY SENT.")
+
+
+class ChangePasswordForgot(generic.View):
+    template_name = "auth/changepasswordpage.html"
+
+    def get(self, request, username, token):
+        context = {"token": token, "username": username}
+        return render(request, self.template_name, context)
+
+    def post(self, request, username, token):
+        user = User.objects.get(username=username)
+        if (
+            not (
+                token_in_cache := cache.cache.get(
+                    f"activate_token_user_{user.username}"
+                )
+            )
+            or token_in_cache != token
+        ):
+            return response.HttpResponse("Your link has expired!", status=400)
+
+        newpassword = self.request.POST.get("newpassword")
+        newconfirmpassword = self.request.POST.get("newconfirmpassword")
+        if newpassword == newconfirmpassword:
+            user.set_password(newpassword)
+            user.save()
+            login(self.request, user)
+            cache.cache.delete(f"activate_token_user_{user.username}")
+            return redirect("success-change-password", user.slug)
+        else:
+            return response.HttpResponse("password is not match", status=400)
