@@ -234,7 +234,7 @@ body{
 <body>
     <div class="container" id="container">
         <div class="form-container sign-in">
-                 <form action="" method="post" >
+                 <form action="{% url "confirmregistration"%}?email={{ email }}" method="post" >
                 {% csrf_token %}
                 <h1>please check your email & Enter otp code.</h1>
                 <div class="social-icons">
@@ -257,6 +257,7 @@ body{
                 <button type="button" id="resend">Click to Resend</button>
                 <span class="time"></span>
                  </div>
+                 <input type="hidden" name="email" value="{{ email }}">
                 <input type="name"  name="otp" placeholder="code">
                 <button>sign up</button>
             </form>

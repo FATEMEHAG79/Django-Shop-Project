@@ -234,7 +234,7 @@ body{
 <body>
     <div class="container" id="container">
         <div class="form-container sign-up">
-              <form action="{% url 'login' email token %}" method="post" >
+              <form action="{% url 'login' %}?email={{ email }}" method="post" >
                   <div>
                     <style>
                         h5{
@@ -252,14 +252,15 @@ body{
                 <div class="social-icons" >
                      <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
                 </div>
+                  <input type="hidden" name="email" value="{{ email }}">
                 <input type="username" name="username" placeholder="Email or username">
                 <input type="password" name="password" placeholder="Password">
-                <a href="#">Forget Your Password?</a>
+                <a href="{% url "forgotpassword" %}">Forget Your Password?</a>
                 <button>Sign In</button>
             </form>
         </div>
         <div class="form-container sign-in">
-              <form action="{% url "confirmotp" email token %}" method="post" >
+              <form action="{% url "confirmotp"%}?email={{ email }}" method="post" >
                    <div>
                     <style>
                         h5{
@@ -277,6 +278,7 @@ body{
                 <div class="social-icons" >
                      <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
                 </div>
+              <input type="hidden" name="email" value="{{ email }}">
                 <input type="otp" name="otp" placeholder="code">
                 <button>sign in</button>
               <div class="timer">

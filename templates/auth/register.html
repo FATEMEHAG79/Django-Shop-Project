@@ -234,7 +234,7 @@ body{
 <body>
     <div class="container" id="container">
         <div class="form-container sign-in">
-                 <form action="" method="post" >
+                 <form action="{% url "register" email%}" method="post" >
                 {% csrf_token %}
                 <div class="social-icons">
                 </div>
@@ -250,6 +250,7 @@ body{
                         {% endfor %}
                     {% endif %}
               </div>
+                 <input type="hidden" name="email" value="{{ email }}">
                 <input type="username"  name="username" placeholder="username">
                  <input type="phone_number"  name="phone_number" placeholder="phone_number">
                  <input type="password"  name="password" placeholder="password">
