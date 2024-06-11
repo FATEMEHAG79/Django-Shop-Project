@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from utils import mail
 from django.shortcuts import redirect
+from django.http import JsonResponse
 
 User = get_user_model()
 
@@ -111,3 +112,22 @@ class ActivateProfile(generic.RedirectView):
                     )
                     return redirect("send_email")
         return redirect("profile", User.objects.get(user=user).slug)
+
+
+class Changepassword(generic.RedirectView):
+    def post(self, request):
+        user = request.user
+        password = self.request.POST.get("backpassword")
+        newpassword = self.request.POST.get("newpassword")
+        newconfirmpassword = self.request.POST.get("newconfirmpassword")
+        if user.check_password(password):
+            if newpassword==newconfirmpassword:
+                user.set_password(newpassword)
+                user.save()
+                return JsonResponse({"success":True,"message":"password change succeddfully." })
+            else:
+                return JsonResponse({"success": False, "message": "password and new password not match."})
+        else:
+            return JsonResponse({"success": False, "message": "back password is not correct."})
+
+
