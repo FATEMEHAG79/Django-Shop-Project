@@ -109,9 +109,9 @@
                                         <form action="{% url "editprofile"  %}" method="post">
                                             {% csrf_token %}
                                             <div class="input-radio">
-    <span class="custom-radio"><input type="radio" value="male" name="gender" {% if user.gender == 'male' %}checked{% endif %}> Mr.</span>
-    <span class="custom-radio"><input type="radio" value="female" name="gender" {% if user.gender == 'female' %}checked{% endif %}> Mrs.</span>
-</div><br>
+                                                <span class="custom-radio"><input type="radio" value="male" name="gender" {% if user.gender == 'male' %}checked{% endif %}> Mr.</span>
+                                                <span class="custom-radio"><input type="radio" value="female" name="gender" {% if user.gender == 'female' %}checked{% endif %}> Mrs.</span>
+                                            </div><br>
                                             <div class="default-form-box mb-20">
                                                 <label>First Name</label>
                                                 <input type="text" name="first_name" value={{ request.user.first_name }}>
@@ -161,25 +161,32 @@
 
                         </div>
                          <div class="tab-pane" id="chamgepassword">
-                              <div id="message"></div>
-                            <form action="{% url "changepassword" %}" method="post"  id="changePasswordForm">
+                            <form   id="changePasswordForm">
                             {% csrf_token %}
+                                <h3  style="color: red"></h3>
                              <div class="default-form-box mb-20">
                                  <label>Back Password</label>
-                                 <input type="password" name="backpassword" required>
+                                 <input type="password"  id="backpassword" name="backpassword" required>
                              </div>
                             <div class="default-form-box mb-20">
                                  <label>New Password</label>
-                                 <input type="password" name="newpassword" required>
+                                 <input type="password" id="newpassword" name="newpassword" required>
                             </div>
                                  <div class="default-form-box mb-20">
                                  <label>New Confirm Password</label>
-                                 <input type="password" name="newconfirmpassword" required>
+                                 <input type="password" id="newconfirmpassword" name="newconfirmpassword" required>
                             </div>
                             <button class="btn btn-md btn-black-default-hover"
                                                     type="submit"> Save </button>
                             </form>
-
+                             <br>
+                             <form action="{% url "forgotpassword" %}" method="post">
+                                 {% csrf_token %}
+                                 <a href="{% url "forgotpassword" %}">
+                                  <button class="btn btn-md btn-black-default-hover"
+                                                    type="submit"> forgot password </button>
+                             </a>
+                             </form>
                         </div>
                     </div>
                 </div>
@@ -188,29 +195,22 @@
     </div> <!-- ...:::: End Account Dashboard Section:::... -->
 {% endblock %}
 {% block extra_scripts %}
-  <script>
-        $(document).ready(function() {
-            $('#changePasswordForm').on('submit', function(event) {
-                event.preventDefault();
-
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url "changepassword" %}',
-                    data: {
-                        'backpassword': $('input[name="backpassword"]').val(),
-                        'newpassword': $('input[name="newpassword"]').val(),
-                        'newconfirmpassword': $('input[name="newconfirmpassword"]').val(),
-                        'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#message').html('<p style="color: green;">' + response.message + '</p>');
-                        } else {
-                            $('#message').html('<p style="color: red;">' + response.message + '</p>');
-                        }
-                    }
-                });
-            });
-        });
+  <script type="text/javascript">
+        $(document).on("submit" , "#changePasswordForm" , function(e){
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{% url "changepassword" %}",
+                data:{
+                    backpassword : $("#backpassword").val(),
+                    newpassword :$("#newpassword").val(),
+                    newconfirmpassword : $("#newconfirmpassword").val(),
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                },
+                success: function(data){
+                    $("h3").html(data);
+                }
+            })
+        })
     </script>
 {% endblock extra_scripts %}
