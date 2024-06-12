@@ -87,7 +87,7 @@ class EditProfile(generic.RedirectView):
         }
         User.objects.filter(email=email).update(**data)
         login(self.request, request.user)
-        success = " change succeddfully."
+        success = " change successfully."
         return HttpResponse(success)
 
 
