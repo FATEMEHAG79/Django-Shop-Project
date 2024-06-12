@@ -92,8 +92,23 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="tab-pane" id="address">
-                            <div class="col-12">
+                        <div class="tab-pane fade" id="address">
+                            {% for add in address %}
+                            <div class="panel-default">
+                                <label class="checkbox-default" for="newShipping" data-bs-toggle="collapse"
+                                    data-bs-target="#anotherShipping">
+                                    <input type="checkbox" id="newShipping">
+                                    <span>     {{ add.province}}/{{ add.city }}/{{ add.apartment_address }}</span>
+                                </label>
+                                <div id="anotherShipping" class="collapse mt-3" data-parent="#anotherShipping">
+                                        <div class="row">
+                                            <a href="{% url "updateaddress" add.id %}"><button class="btn btn-md btn-black-default-hover"
+                                                    type="submit">EDIT</button></a>
+                                        </div></div>
+                            </div>
+                                <br>
+                                {% endfor %}
+                            <div class="panel-default">
                                     <label class="checkbox-default" for="newShipping" data-bs-toggle="collapse"
                                         data-bs-target="#anotherShipping">
                                         <input type="checkbox" id="newShipping">
@@ -157,8 +172,8 @@
                                              <div class="col-12">
                                                 <div class="select_form_select default-form-box">
                                                    <div class="default-form-box">
-                                                    <label>city <span>*</span></label>
-                                                    <input placeholder="city" type="text" name="city" id="city" required>
+                                                      <label>city <span>*</span></label>
+                                                       <input placeholder="city" type="text" name="city" id="city" required>
                                                     </div>
                                                 </div>
                                              </div>
@@ -177,7 +192,7 @@
                                             <div class="col-12">
                                                 <div class="default-form-box">
                                                     <label>Phone<span>*</span></label>
-                                                    <input type="text" name="phone_number_reciver" id="phone_number_reciver" required>
+                                                    <input type="number" name="phone_number_reciver" id="phone_number_reciver" required>
                                                 </div>
                                             </div>
                                              <div class="save_button mt-3">
@@ -187,6 +202,7 @@
                                          </form>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="account-details">
                             <h3>Account details </h3>
@@ -323,8 +339,8 @@
         })
     </script>
      <script type="text/javascript">
-        $(document).on("submit" , "#createaddress" , function(e){
-            e.preventDefault();
+        $(document).on("submit" , "#createaddress" , function(b){
+            b.preventDefault();
             $.ajax({
                 type: "POST",
                 url: "{% url "createaddress" %}",
@@ -335,7 +351,7 @@
                     last_name_recivier : $("#last_name_recivier").val(),
                     apartment_address : $("#apartment_address").val(),
                     zip : $("#zip").val(),
-                    phone_number : $("#phone_number").val(),
+                    phone_number_reciver : $("#phone_number_reciver").val(),
                     csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
                 },
                 success: function(data){
