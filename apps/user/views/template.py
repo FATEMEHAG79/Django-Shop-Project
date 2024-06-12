@@ -1,5 +1,6 @@
 from uuid import uuid4
 from apps.order.models import Order
+from apps.user.models import Address
 from utils import cache
 from django.http import response
 from django.views import generic, View
@@ -188,3 +189,30 @@ class ChangePasswordForgot(generic.View):
             return redirect("success-change-password", user.slug)
         else:
             return response.HttpResponse("password is not match", status=400)
+
+
+class CreateAddress(generic.RedirectView):
+    def post(self, request):
+        user = request.user
+        first_name_recivier = self.request.POST.get("first_name_recivier")
+        last_name_recivier = self.request.POST.get("last_name_recivier")
+        province = self.request.POST.get("province")
+        zip = self.request.POST.get("zip")
+        city = self.request.POST.get("city")
+        apartment_address = self.request.POST.get("apartment_address")
+        phone_number_reciver = self.request.POST.get("phone_number_reciver")
+        address = Address.objects.create(
+            user=user,
+            first_name_recivier=first_name_recivier,
+            last_name_recivier=last_name_recivier,
+            city=city,
+            province=province,
+            apartment_address=apartment_address,
+            zip=zip,
+            phone_number_reciver=phone_number_reciver,
+        )
+        address.save()
+        success="your Address registration."
+        return HttpResponse(success)
+
+
