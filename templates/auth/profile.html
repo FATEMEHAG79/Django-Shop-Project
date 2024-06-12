@@ -93,13 +93,100 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="address">
-                            <p>The following addresses will be used on the checkout page by default.</p>
-                            <h5 class="billing-address">Billing address</h5>
-                            <a href="#" class="view">Edit</a>
-                            <p><strong>Bobby Jackson</strong></p>
-                            <address>
-                                Address: Your address goes here.
-                            </address>
+                            <div class="col-12">
+                                    <label class="checkbox-default" for="newShipping" data-bs-toggle="collapse"
+                                        data-bs-target="#anotherShipping">
+                                        <input type="checkbox" id="newShipping">
+                                        <span>create address</span>
+                                    </label>
+                                    <div id="anotherShipping" class="collapse mt-3" data-parent="#anotherShipping">
+                                        <div class="row">
+                                            <form id="createaddress">
+                                                <h5 style="color:red;"></h5>
+                                                <br>
+                                            <div class="col-12">
+                                                <div class="default-form-box">
+                                                    <label>First Name <span>*</span></label>
+                                                    <input type="text" name="first_name_recivier" id="first_name_recivier" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="default-form-box">
+                                                    <label>Last Name <span>*</span></label>
+                                                    <input type="text" name="last_name_recivier" id="last_name_recivier" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="select_form_select default-form-box">
+                                                    <label for="countru_name">Province <span>*</span></label>
+                                                    <select class="niceselect_option wide" name="province"  id="province" required>
+                                                        <option value="Tehran">Tehran</option>
+                                                        <option value="Gilan">Gilan</option>
+                                                        <option value="East Azerbaijan">East Azerbaijan</option>
+                                                        <option value="Khuzestan">Khuzestan</option>
+                                                        <option value="Fars">Fars</option>
+                                                        <option value="Isfahan">Isfahan</option>
+                                                        <option value="Razavi Khorasan">Razavi Khorasan</option>
+                                                        <option value="Qazvin">Qazvin</option>
+                                                        <option value="Semnan">Semnan</option>
+                                                        <option value="Qom">Qom</option>
+                                                        <option value="Markazi">Markazi</option>
+                                                        <option value="Zanjan">Zanjan</option>
+                                                        <option value="Mazandaran">Mazandaran</option>
+                                                        <option value="Golestan">Golestan</option>
+                                                        <option value="Ardabil">Ardabil</option>
+                                                        <option value="West Azerbaijan">West Azerbaijan</option>
+                                                        <option value="Hamadan">Hamadan</option>
+                                                        <option value="Kurdistan">Kurdistan</option>
+                                                        <option value="Kermanshah">Kermanshah</option>
+                                                        <option value="Lorestan">Lorestan</option>
+                                                        <option value="Bushehr">Bushehr</option>
+                                                        <option value="Kerman">Kerman</option>
+                                                        <option value="Hormozgan">Hormozgan</option>
+                                                        <option value="Chaharmahal and Bakhtiari">Chaharmahal and Bakhtiari</option>
+                                                        <option value="Yazd">Yazd</option>
+                                                        <option value="Sistan and Baluchestan">Sistan and Baluchestan</option>
+                                                        <option value="Ilam">Ilam</option>
+                                                        <option value="Kohgiluyeh and Boyer-Ahmad">Kohgiluyeh and Boyer-Ahmad</option>
+                                                        <option value="North Khorasan">North Khorasan</option>
+                                                        <option value="South Khorasan">South Khorasan</option>
+                                                        <option value="Alborz">Alborz</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                             <div class="col-12">
+                                                <div class="select_form_select default-form-box">
+                                                   <div class="default-form-box">
+                                                    <label>city <span>*</span></label>
+                                                    <input placeholder="city" type="text" name="city" id="city" required>
+                                                    </div>
+                                                </div>
+                                             </div>
+                                            <div class="col-12">
+                                                <div class="default-form-box">
+                                                    <label>address <span>*</span></label>
+                                                    <input placeholder="address" type="text" name="apartment_address" id="apartment_address" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="default-form-box">
+                                                    <label>zip code <span>*</span></label>
+                                                    <input type="text" name="zip" id="zip" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="default-form-box">
+                                                    <label>Phone<span>*</span></label>
+                                                    <input type="text" name="phone_number_reciver" id="phone_number_reciver" required>
+                                                </div>
+                                            </div>
+                                             <div class="save_button mt-3">
+                                                <button class="btn btn-md btn-black-default-hover"
+                                                    type="submit">Save</button>
+                                            </div>
+                                         </form>
+                                    </div>
+                                </div>
                         </div>
                         <div class="tab-pane fade" id="account-details">
                             <h3>Account details </h3>
@@ -231,6 +318,28 @@
                 },
                 success: function(data){
                     $("h4").html(data);
+                }
+            })
+        })
+    </script>
+     <script type="text/javascript">
+        $(document).on("submit" , "#createaddress" , function(e){
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{% url "createaddress" %}",
+                data:{
+                    province : $("#province").val(),
+                    city : $("#city").val(),
+                    first_name_recivier : $("#first_name_recivier").val(),
+                    last_name_recivier : $("#last_name_recivier").val(),
+                    apartment_address : $("#apartment_address").val(),
+                    zip : $("#zip").val(),
+                    phone_number : $("#phone_number").val(),
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                },
+                success: function(data){
+                    $("h5").html(data);
                 }
             })
         })
