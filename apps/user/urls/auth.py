@@ -44,6 +44,11 @@ urlpatterns = [
     path("forgotpassword/", template.ForgotPassword.as_view(), name="forgotpassword"),
     path("createaddress/", template.CreateAddress.as_view(), name="createaddress"),
     path(
+        "updateaddress/<int:id>/",
+        template.UpdateAddress.as_view(),
+        name="updateaddress",
+    ),
+    path(
         "newpassword/<str:username>/<str:token>",
         template.ChangePasswordForgot.as_view(),
         name="newpassword",
