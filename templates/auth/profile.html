@@ -106,35 +106,36 @@
                             <div class="login">
                                 <div class="login_form_container">
                                     <div class="account_login_form">
-                                        <form action="{% url "editprofile"  %}" method="post">
+                                        <form id="editprofile">
                                             {% csrf_token %}
+                                        <h4  style="color: red"></h4>
                                             <div class="input-radio">
-                                                <span class="custom-radio"><input type="radio" value="male" name="gender" {% if user.gender == 'male' %}checked{% endif %}> Mr.</span>
-                                                <span class="custom-radio"><input type="radio" value="female" name="gender" {% if user.gender == 'female' %}checked{% endif %}> Mrs.</span>
+                                                <span class="custom-radio"><input type="radio" value="male" id="gender_male" name="gender" {% if user.gender == 'male' %}checked{% endif %}> Mr.</span>
+                                                <span class="custom-radio"><input type="radio" value="female" id="gender_female" name="gender" {% if user.gender == 'female' %}checked{% endif %}> Mrs.</span>
                                             </div><br>
                                             <div class="default-form-box mb-20">
                                                 <label>First Name</label>
-                                                <input type="text" name="first_name" value={{ request.user.first_name }}>
+                                                <input type="text" id="first_name" name="first_name" value={{ request.user.first_name }}>
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Last Name</label>
-                                                <input type="text" name="last_name" value={{ request.user.last_name }}>
+                                                <input type="text" id="last_name" name="last_name" value={{ request.user.last_name }}>
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Email</label>
-                                                <input type="text" name="email" value={{ request.user.email }}>
+                                                <input type="text" id="email" name="email" value={{ request.user.email }}>
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>username</label>
-                                                <input type="text" name="username" value={{ request.user.username }}>
+                                                <input type="text" id="username" name="username" value={{ request.user.username }}>
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>phone_number</label>
-                                                <input type="text" name="phone_number" value={{ request.user.phone_number }}>
+                                                <input type="text" id="phone_number" name="phone_number" value={{ request.user.phone_number }}>
                                             </div>
                                             <div class="default-form-box mb-20">
                                                 <label>Birthdate</label>
-                                                <input type="date" name="birthday">
+                                                <input type="date" id="birthday" name="birthday">
                                             </div>
                                             <br>
                                             <br>
@@ -209,6 +210,27 @@
                 },
                 success: function(data){
                     $("h3").html(data);
+                }
+            })
+        })
+    </script>
+      <script type="text/javascript">
+        $(document).on("submit" , "#editprofile" , function(e){
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{% url "editprofile" %}",
+                data:{
+                    gender : $("input[name='gender']:checked").val(),
+                    first_name : $("#first_name").val(),
+                    last_name : $("#last_name").val(),
+                    email : $("#email").val(),
+                    username : $("#username").val(),
+                    phone_number : $("#phone_number").val(),
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                },
+                success: function(data){
+                    $("h4").html(data);
                 }
             })
         })
