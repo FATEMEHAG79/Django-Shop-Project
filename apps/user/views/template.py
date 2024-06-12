@@ -47,6 +47,8 @@ class ProfileView(DetailView, LoginRequiredMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = context["user"]
+        address = Address.objects.filter(user=user)
+        context["address"] = address
         order_completed = Order.objects.filter(user=user, status=True)
         order_incompleted = Order.objects.filter(user=user, status=False)
         context["order_completed"] = order_completed
@@ -201,6 +203,7 @@ class CreateAddress(generic.RedirectView):
         city = self.request.POST.get("city")
         apartment_address = self.request.POST.get("apartment_address")
         phone_number_reciver = self.request.POST.get("phone_number_reciver")
+        print(city)
         address = Address.objects.create(
             user=user,
             first_name_recivier=first_name_recivier,
@@ -212,7 +215,35 @@ class CreateAddress(generic.RedirectView):
             phone_number_reciver=phone_number_reciver,
         )
         address.save()
-        success="your Address registration."
+        success = "your Address registration."
         return HttpResponse(success)
 
 
+class UpdateAddress(generic.RedirectView):
+    template_name = "auth/updateaddress.html"
+
+    def get(self, request, id):
+        address = Address.objects.filter(id=id, user=request.user)
+        return render(request, self.template_name, {"address": address})
+
+    def post(self, request, id):
+        user = request.user
+        first_name_recivier = self.request.POST.get("first_name_recivier")
+        last_name_recivier = self.request.POST.get("last_name_recivier")
+        province = self.request.POST.get("province")
+        zip = self.request.POST.get("zip")
+        city = self.request.POST.get("city")
+        apartment_address = self.request.POST.get("apartment_address")
+        phone_number_reciver = self.request.POST.get("phone_number_reciver")
+        Address.objects.filter(user=user, id=id).update(
+            first_name_recivier=first_name_recivier,
+            last_name_recivier=last_name_recivier,
+            city=city,
+            province=province,
+            apartment_address=apartment_address,
+            zip=zip,
+            phone_number_reciver=phone_number_reciver,
+        )
+        login(self.request, request.user)
+        success = " change successfully."
+        return HttpResponse(success)
