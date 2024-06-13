@@ -73,6 +73,7 @@ class Product(LogicalMixin, TimeStampMixin):
     brand = models.ForeignKey(
         Brand, on_delete=models.CASCADE, related_name="brand", null=True
     )
+    quantity = models.IntegerField()
     name = models.CharField(max_length=250)
     description = models.TextField()
     price = models.FloatField(default=0)
@@ -81,6 +82,11 @@ class Product(LogicalMixin, TimeStampMixin):
 
     def __str__(self):
         return self.slug
+
+    def deactivate(self):
+        if self.quantity == 0:
+            self.is_active = False
+            self.save(update_fields=["is_active"])
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
