@@ -150,7 +150,7 @@ class Registeration(generic.View):
     template_name = "auth/register.html"
 
     def get(self, request, email):
-        return render(request, self.tempclate_name, {"email": email})
+        return render(request, self.template_name, {"email": email})
 
     def post(self, request, email):
         username = self.request.POST.get("username", None)
