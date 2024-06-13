@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser,Group
+from django.contrib.auth.models import AbstractUser, Group
 from django.core.validators import RegexValidator
 from django.db import models
 from django.template.defaultfilters import slugify
@@ -22,7 +22,7 @@ class User(LogicalMixin, AbstractUser, TimeStampMixin):
         null=True,
         blank=True,
     )
-    groups = models.ForeignKey(Group,on_delete=models.CASCADE,blank=True,null=True)
+    groups = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
     email = models.EmailField(unique=True)
     gender = models.CharField(max_length=48, choices=gender)
     birthday = models.DateTimeField(null=True, blank=True)
@@ -56,22 +56,16 @@ class User(LogicalMixin, AbstractUser, TimeStampMixin):
 
 class Address(LogicalMixin, TimeStampMixin):
     province = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     apartment_address = models.CharField(max_length=100)
     zip = models.CharField(max_length=50)
-    first_name_recivier= models.CharField(max_length=50)
-    last_name_recivier  = models.CharField(max_length=50)
-    phone_number_reciver = models.BigIntegerField(
-        validators=[RegexValidator(r"^989[0-3,9]\d{8}$")],
-        error_messages={"unique": ("A user with mobile number already exists")},
-        null=True,blank=True
-    )
+    first_name_recivier = models.CharField(max_length=50)
+    last_name_recivier = models.CharField(max_length=50)
+    phone_number_reciver = models.BigIntegerField()
 
     def __str__(self):
         return self.user.username
 
-
     class Meta:
         verbose_name_plural = "Addresses"
-
-
