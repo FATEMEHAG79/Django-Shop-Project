@@ -38,7 +38,7 @@
                         <!-- End Thumbnail Image -->
                     </div>
                 </div>
-                
+
                 <div class="col-xl-7 col-lg-6">
                     <div class="product-details-content-area product-details--golden" data-aos="fade-up"
                         data-aos-delay="200">
@@ -55,8 +55,13 @@
                                 </ul>
                                 <a href="#" class="customer-review ml-2">(customer review )</a>
                             </div>
-                            <div class="price"> <span  id="current-product-price"><del></del>
-                                                        {{ product.price }}</span></div>
+                            <div class="price">
+                                {% if   not product.price in product.discount_price%}
+                                <span  id="current-product-price"><del>${{ product.price }}</del> ${{ product.discount_price }}</span>
+                                {% else %}
+                                    <span class="price">{{ product.price }}</span>
+                                {% endif %}
+                            </div>
                         </div> <!-- End  Product Details Text Area-->
                         <!-- Start Product Variable Area -->
                         <div class="product-details-variable">
@@ -76,10 +81,14 @@
                                 </div>
 
                                 <div class="product-add-to-cart-btn">
+                                    {% if not product.quantity  in 0 %}
                                       <input type="hidden" value="{{ product.id }}" class="product-id" name="" id="">
                                     <input type="hidden" value="{{ product.name }}" class="product-name" name="" id="">
                                     <button href="" class="btn btn-block btn-lg btn-black-default-hover"
                                         data-bs-toggle="modal" data-bs-target="#modalAddcart" id="add-to-cart-btn">+ Add To Cart</button>
+                                    {% else %}
+                                         <button href="" class="btn btn-block btn-lg btn-black-default-hover">OUT OF STOCK</button>
+                                    {% endif %}
                                 </div>
                             </div>
                             <!-- Start  Product Details Meta Area-->

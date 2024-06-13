@@ -1,7 +1,7 @@
 {%extends 'base.html'%}
 {% block content %}
 {%load static%}
-<br><br><br><br>
+<br><br><br><br><br><br><br><br>
 <!-- ...::::  z Start Shop Section:::... -->
 <div class="shop-section">
 <div class="container">
@@ -156,10 +156,15 @@
                                                         {% for m in product.media.all %}
                                                         <img src="{{ m.file.url }}">
                                                             {% endfor %}
+
                                                     </a>
                                                     <div class="action-link">
                                                         <div class="action-link-left">
+                                                             {% if not product.quantity  in 0 %}
                                                             <a href="{% url "productdetail" product.category.slug product.slug %}" style="color: white">View Detail</a>
+                                                              {% else %}
+                                                                 <a href="{% url "productdetail" product.category.slug product.slug %}" style="color: white">OUT OF STOCK</a>
+                                                            {% endif %}
                                                         </div>
                                                         <div class="action-link-right">
                                                             <a href="#" data-bs-toggle="modal"
@@ -175,7 +180,7 @@
                                                 <div class="content">
                                                     <div class="content-left">
                                                         <h6 class="title"><a
-                                                                href="{% url "productdetail" product.category.slug product.slug %}">{{ product.name}}</a></h6>
+                                                                href="">{{ product.name}}</a></h6>
                                                         <ul class="review-star">
                                                             <li class="fill"><i class="ion-android-star"></i>
                                                             </li>
@@ -190,8 +195,11 @@
                                                         </ul>
                                                     </div>
                                                     <div class="content-right">
-                                                       <span class="product-list-price" id="current-product-price"><del></del>
-                                                        {{ product.price }}</span>
+                                                        {% if   not product.price in product.discount_price%}
+                                                            <span  class="product-list-price" id="current-product-price"><del>${{ product.price }}</del> ${{ product.discount_price }}</span>
+                                                            {% else %}
+                                                                <span class="product-list-price" id="current-product-price">{{ product.price }}</span>
+                                                            {% endif %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -200,26 +208,22 @@
                                         </div>
                                 </div>
                                 <!-- Start List View Product -->
-                             {% for product in productlist %}
                                 <div class="tab-pane sort-layout-single" id="layout-list">
                                     <div class="row">
                                         <div class="col-12">
                                             <!-- Start Product Defautlt Single -->
+                                        {% for product in productlist %}
                                             <div class="product-list-single product-color--golden">
-                                                <a href="{% url "productdetail" product.category.slug product.slug %}"
-                                                    class="product-list-img-link">
-                                                    <img class="img-fluid"
-                                                        src=""
-                                                        alt="">
-                                                    <img class="img-fluid"
-                                                        src=""
-                                                        alt="">
-                                                </a>
+                                                <a href="product-details-default.html"
+                                                            class="product-list-img-link">
+                                                        {% for m in product.media.all %}
+                                                            <img class="img-fluid" style="width: 300px;height: 260px"
+                                                                src="{{ m.file.url }}"
+                                                                alt="">
+                                                         {% endfor %}
+                                                        </a>
                                                 <div class="product-list-content">
-                                                    <h5 class="product-list-link"><a
-                                                            href="{% url "productdetail" product.category.slug product.slug %}">{{ product.name}}{% for m in media %}
-                                                        <img src="{{ m.file.url }}" style="width: 200px">
-                                                            {% endfor %}</a></h5>
+                                                    <h5 class="product-list-link"><a href="{% url "productdetail" product.category.slug product.slug %}">{{ product.name}}</a></h5>
                                                     <ul class="review-star">
                                                         <li class="fill"><i class="ion-android-star"></i></li>
                                                         <li class="fill"><i class="ion-android-star"></i></li>
@@ -227,26 +231,33 @@
                                                         <li class="fill"><i class="ion-android-star"></i></li>
                                                         <li class="empty"><i class="ion-android-star"></i></li>
                                                     </ul>
-                                                    <span class="product-list-price" id="current-product-price"><del></del>
-                                                        {{ product.price }}</span>
+                                                    {% if   not product.price in product.discount_price%}
+                                                            <span  class="product-list-price" id="current-product-price"><del>${{ product.price }}</del> ${{ product.discount_price }}</span>
+                                                            {% else %}
+                                                                <span class="product-list-price" id="current-product-price">{{ product.price }}</span>
+                                                            {% endif %}
                                                     <p>{{ product.description}}</p>
                                                     <div class="product-action-icon-link-list">
-                                                        <a
-                                                            class="btn btn-lg btn-black-default-hover"  href="{% url "productdetail" product.category.slug product.slug %}">View Detail</a>
+                                                         {% if not product.quantity  in 0 %}
+                                                            <a class="btn btn-lg btn-black-default-hover" href="{% url "productdetail" product.category.slug product.slug %}" style="color: white">View Detail</a>
+                                                              {% else %}
+                                                                 <a class="btn btn-lg btn-black-default-hover" href="{% url "productdetail" product.category.slug product.slug %}" style="color: white">OUT OF STOCK</a>
+                                                            {% endif %}
                                                         <a href="" data-bs-toggle="modal"
                                                             data-bs-target="#modalQuickview"
                                                             class="btn btn-lg btn-black-default-hover"><i
                                                                 class="icon-magnifier"></i></a>
                                                         <a href=""
-                                                            class="btn btn-lg btn-black-default-hover"><i
-                                                                class="icon-heart"></i></a>
-                                                        <a href=""
-                                                            class="btn btn-lg btn-black-default-hover"><i
-                                                                class="icon-shuffle"></i></a>
+                                                           class="btn btn-lg btn-black-default-hover"><i class="icon-heart"></i></a>
+
                                                     </div>
                                                 </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            <br><br>
                                                 {% endfor %}
-                                            </div> <!-- End Product Defautlt Single -->
+                                            </div>
                                         </div>
                                         </div>
                                     </div>
@@ -256,13 +267,7 @@
                     </div>
                 </div>
             </div> <!-- End Tab Wrapper -->
-            <!-- Start Pagination -->
-            <div class="page-pagination text-center" data-aos="fade-up" data-aos-delay="0">
-                <ul>
-                    <li><a class="active" href="#">1</a></li>
-                    <li><a href="#"><i class="ion-ios-skipforward"></i></a></li>
-                </ul>
-            </div> <!-- End Pagination -->
+
         </div>
     </div>
 </div>
