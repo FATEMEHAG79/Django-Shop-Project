@@ -1,11 +1,11 @@
 from django.db import models
 from apps.shop.models import Product
-from apps.user.models import User
+from apps.user.models import User, Address
 
 
 class Coupon(models.Model):
     code = models.CharField(max_length=15)
-    amount = models.FloatField()
+    amount = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return self.code
@@ -15,7 +15,9 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField(auto_now=True)
+    coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE, blank=True, null=True)
     status = models.BooleanField(default=False)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username
@@ -34,7 +36,7 @@ class OrderItem(models.Model):
     item = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, default=None,related_name="items"
+        Order, on_delete=models.CASCADE, default=None, related_name="items"
     )  # Add default=None here
 
     def __str__(self):
