@@ -2,12 +2,9 @@ from apps.shop.models import Category, Brand, Product, Media
 
 
 def myquery(request):
-    # بررسی وجود session و cart_data_obj در session
     if "cart_data_obj" in request.session:
         cart_data = request.session["cart_data_obj"]
-        totalcartitems = sum(
-            item["qty"] for item in cart_data.values()
-        )
+        totalcartitems = sum(item["qty"] for item in cart_data.values())
     else:
         cart_data = {}
         totalcartitems = 0
@@ -28,6 +25,6 @@ def myquery(request):
         "totalcartitems": totalcartitems,
         "cart_data": cart_data,
         "cart_total_amount": cart_total_amount,
-        "brands": Brand.objects.all()
+        "brands": Brand.objects.all(),
     }
     return context
