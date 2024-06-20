@@ -156,7 +156,7 @@
                                         <div class="modal-add-cart-product-cart-buttons">
                                             <a href="{% url 'cart' %}">View Cart</a>
                                                {% if user.is_authenticated %}
-                                            <a href="{% url "checkout" request.user.slug %}">Checkout</a>
+                                            <a href="{% url "checkout"  %}">Checkout</a>
                                             {% else %}
                                             <a href="{%url 'signup/in'%}">Checkout</a>
                                             {% endif %}

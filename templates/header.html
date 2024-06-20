@@ -337,14 +337,16 @@
                         <a href="{% url "productdetail" item.slug_category item.slug %}" class="offcanvas-cart-item-image-link">
                             <img src="{{ image.file.url }}" alt=""
                                 class="offcanvas-cart-image">
+                         <img src="{{ image.file }}" alt=""
+                                class="offcanvas-cart-image">
                         </a>
                             {% endfor %}
                         <div class="offcanvas-cart-item-content">
-                            <a href="{% url "productdetail" item.slug_category item.slug %}" class="offcanvas-cart-item-link">{{ item.name}}</a>
+                            <a href="" class="offcanvas-cart-item-link">{{ item.name}}</a>
                             <div class="offcanvas-cart-item-details">
                                 <span class="offcanvas-cart-item-details-quantity">{{ item.qty }} x </span>
                                 <span class="offcanvas-cart-item-details-price">${{ item.price }}</span>
-                                <span class="offcanvas-cart-item-details-price">     =${{ item.totla_price }}</span>
+                                <span class="offcanvas-cart-item-details-price">     =${{ item.total_price }}</span>
                             </div>
                         </div>
                     </div>
@@ -361,20 +363,20 @@
         {% else %}
                 <img src="{% static "images/empty-cart/empty-cart.png" %}" alt=""
                                 class="offcanvas-cart-image">
-            
+
         {% endif %}
 
             <ul class="offcanvas-cart-action-button">
                 {%if "cart_data_obj" in request.session%}
                 <li><a href="{% url "cart" %}" class="btn btn-block btn-golden">View Cart</a></li> <br>
-                            {% if user.is_authenticated %}
-                 <li><a href="{% url "checkout" request.user.slug %}" class="btn btn-block btn-golden">CHeckout</a></li>
+                    {% if user.is_authenticated %}
+                 <li><a href="{% url "checkout"  %}" class="btn btn-block btn-golden">CHeckout</a></li>
                 {% else %}
                  <li><a href="{%url 'signup/in'%}" class="btn btn-block btn-golden">CHeckout</a></li>
                 {% endif %}
                 {% else %}
                          <br><br>
-                         <pre class="title" style="color: #bda685;font-size: 20px">     Your Cart is Empty!</pre>
+                         <pre class="title" style="color: #bda685;font-size: 20px"> Your Cart is Empty!</pre>
                          <br>
                          <li><a href="{% url "home" %}" class="btn btn-block btn-golden">SHOPPING</a></li>
                 {% endif %}
