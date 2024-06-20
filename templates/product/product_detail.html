@@ -13,8 +13,8 @@
                             <div class="swiper-wrapper">
                                 <div class="product-image-large-image swiper-slide zoom-image-hover img-responsive">
                                    {% for m in media %}
-                                                        <img src="{{ m.file.url }}">
-                                                            {% endfor %}
+                                    <img src="{{ m.file.url }}">
+                                        {% endfor %}
                                 </div>
                             </div>
                         </div>
@@ -57,9 +57,9 @@
                             </div>
                             <div class="price">
                                 {% if   not product.price in product.discount_price%}
-                                <span  id="current-product-price"><del>${{ product.price }}</del> ${{ product.discount_price }}</span>
+                               <del>${{ product.price }}</del> <span  id="current-product-price"> {{ product.discount_price }}</span><span>$</span>
                                 {% else %}
-                                    <span class="price">{{ product.price }}</span>
+                                    <span class="price" id="current-product-price">{{ product.price }}</span>
                                 {% endif %}
                             </div>
                         </div> <!-- End  Product Details Text Area-->
@@ -69,7 +69,7 @@
                             <!-- Product Variable Single Item -->
                             <div class="variable-single-item">
                                 <div class="product-stock"> <span class="product-stock-in"><i
-                                            class="ion-checkmark-circled"></i>
+                                        class="ion-checkmark-circled"></i></span>
                                 </div>
                             <!-- Product Variable Single Item -->
                             <div class="d-flex align-items-center ">
@@ -309,7 +309,6 @@
                                                 <p>Your email address will not be published. Required fields are marked
                                                     *</p>
                                             </div>
-
                                             <form action="#" method="post">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -718,6 +717,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <!-- End Product Default Slider Section -->
 {% endblock %}
