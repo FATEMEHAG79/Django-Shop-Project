@@ -6,8 +6,7 @@
     <div class="checkout-section">
         <div class="container">
             <div class="row">
-                <!-- User Quick Action Form -->
-                <div class="col-12">
+                 <div class="col-12">
                     <div class="user-actions accordion" data-aos="fade-up" data-aos-delay="200">
                         <h3>
                             <i class="fa fa-file-o" aria-hidden="true"></i>
@@ -17,128 +16,138 @@
                         </h3>
                         <div id="checkout_coupon" class="collapse checkout_coupon" data-parent="#checkout_coupon">
                             <div class="checkout_info">
-                                <form action="#">
-                                    <input placeholder="Coupon code" type="text">
-                                    <button class="btn btn-md btn-black-default-hover" type="submit">Apply
+                                <form method="post" action="{% url  "coupon"%}" >
+                                    {% csrf_token %}
+                                    <input  name="code" placeholder="Coupon code" type="text">
+                                    <button class="btn btn-md btn-black-default-hover" >Apply
                                         coupon</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- User Quick Action Form -->
+
             </div>
             <!-- Start User Details Checkout Form -->
             <div class="checkout_form" data-aos="fade-up" data-aos-delay="400">
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
                             <h3>SELECT ADRESS</h3>
-                            {% for add in address %}
-                             <div class="panel-default">
-                                    <label class="checkbox-default" for="currencyPaypal" data-bs-toggle="collapse"
-                                        data-bs-target="#methodPaypal">
-                                        <input type="checkbox" id="currencyPaypal">
-                                        <span>{{ add.province}},{{ add.apartment_address }},</span>
+                            <form id="addressForm" method="post" action="{% url 'order' %}">
+    {% csrf_token %}
+    {% for add in address %}
+    <div class="panel-default">
+        <label class="radio-default" for="shipping{{ add.id }}" data-bs-toggle="collapse" data-bs-target="#anotherShipping{{ add.id }}">
+            <input type="radio" name="selectedAddress" id="shipping{{ add.id }}" value="{{ add.id }}">
+            <span> {{ add.province }}/{{ add.city }}/{{ add.apartment_address }}</span>
+            <br><br>
+            <span> {{ add.first_name_recivier }}/{{ add.last_name_recivier }}/{{ add.phone_number_reciver }}</span>
+        </label>
+        <div id="anotherShipping{{ add.id }}" class="collapse mt-3" data-parent="#anotherShipping{{ add.id }}">
+            <div class="row">
+                <a href="{% url "updateaddress" add.id %}"><button class="btn btn-md btn-black-default-hover" type="button">EDIT</button></a>
+            </div>
+        </div>
+    </div>
+    <br>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Place Order</button>
+</form>
+                        <div class="panel-default">
+                                    <label class="checkbox-default" for="newShipping" data-bs-toggle="collapse"
+                                        data-bs-target="#anotherShipping">
+                                        <input type="checkbox" id="newShipping">
+                                        <span>create address</span>
                                     </label>
-                                    <form id="methodPaypal" class="collapse "  action="{% url "editaddress"  %}" method="post">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="address_id" value="{{ add.id }}">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="default-form-box">
-                                        <label>First Name <span>*</span></label>
-                                        <input type="text" name="first_name_recivier" value={{ add.first_name_recivier }}>
+                                    <div id="anotherShipping" class="collapse mt-3" data-parent="#anotherShipping">
+                                        <div class="row">
+                                            <form id="createaddresses">
+                                                {% csrf_token %}
+                                                <h5 style="color:red;"></h5>
+                                                <br>
+                                            <div class="col-12">
+                                                <div class="default-form-box">
+                                                    <label>First Name <span>*</span></label>
+                                                    <input type="text" name="first_name_recivier" id="first_name_recivier" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="default-form-box">
+                                                    <label>Last Name <span>*</span></label>
+                                                    <input type="text" name="last_name_recivier" id="last_name_recivier" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="select_form_select default-form-box">
+                                                    <label for="countru_name">Province <span>*</span></label>
+                                                    <select class="niceselect_option wide" name="province"  id="province" required>
+                                                        <option value="Tehran">Tehran</option>
+                                                        <option value="Gilan">Gilan</option>
+                                                        <option value="East Azerbaijan">East Azerbaijan</option>
+                                                        <option value="Khuzestan">Khuzestan</option>
+                                                        <option value="Fars">Fars</option>
+                                                        <option value="Isfahan">Isfahan</option>
+                                                        <option value="Razavi Khorasan">Razavi Khorasan</option>
+                                                        <option value="Qazvin">Qazvin</option>
+                                                        <option value="Semnan">Semnan</option>
+                                                        <option value="Qom">Qom</option>
+                                                        <option value="Markazi">Markazi</option>
+                                                        <option value="Zanjan">Zanjan</option>
+                                                        <option value="Mazandaran">Mazandaran</option>
+                                                        <option value="Golestan">Golestan</option>
+                                                        <option value="Ardabil">Ardabil</option>
+                                                        <option value="West Azerbaijan">West Azerbaijan</option>
+                                                        <option value="Hamadan">Hamadan</option>
+                                                        <option value="Kurdistan">Kurdistan</option>
+                                                        <option value="Kermanshah">Kermanshah</option>
+                                                        <option value="Lorestan">Lorestan</option>
+                                                        <option value="Bushehr">Bushehr</option>
+                                                        <option value="Kerman">Kerman</option>
+                                                        <option value="Hormozgan">Hormozgan</option>
+                                                        <option value="Chaharmahal and Bakhtiari">Chaharmahal and Bakhtiari</option>
+                                                        <option value="Yazd">Yazd</option>
+                                                        <option value="Sistan and Baluchestan">Sistan and Baluchestan</option>
+                                                        <option value="Ilam">Ilam</option>
+                                                        <option value="Kohgiluyeh and Boyer-Ahmad">Kohgiluyeh and Boyer-Ahmad</option>
+                                                        <option value="North Khorasan">North Khorasan</option>
+                                                        <option value="South Khorasan">South Khorasan</option>
+                                                        <option value="Alborz">Alborz</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                             <div class="col-12">
+                                                <div class="select_form_select default-form-box">
+                                                   <div class="default-form-box">
+                                                      <label>city <span>*</span></label>
+                                                       <input placeholder="city" type="text" name="city" id="city" required>
+                                                    </div>
+                                                </div>
+                                             </div>
+                                            <div class="col-12">
+                                                <div class="default-form-box">
+                                                    <label>address <span>*</span></label>
+                                                    <input placeholder="address" type="text" name="apartment_address" id="apartment_address" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="default-form-box">
+                                                    <label>zip code <span>*</span></label>
+                                                    <input type="text" name="zip" id="zip" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="default-form-box">
+                                                    <label>Phone<span>*</span></label>
+                                                    <input type="number" name="phone_number_reciver" id="phone_number_reciver" required>
+                                                </div>
+                                            </div>
+                                             <div class="save_button mt-3">
+                                                <button class="btn btn-md btn-black-default-hover"
+                                                    type="submit">Save</button>
+                                            </div>
+                                         </form>
                                     </div>
                                 </div>
-                            <div class="col-lg-6">
-                                <div class="default-form-box">
-                                    <label>Last Name <span>*</span></label>
-                                    <input type="text" name="last_name_recivier" value={{ add.last_name_recivier }}>
-                                </div>
-                            </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label for="country">province <span>*</span></label>
-                                        <input type="text" name="province" value={{ add.province }}>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label> address <span>*</span></label>
-                                        <input name="apartment_address" type="text" value="{{ add.apartment_address }}">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label>zip code <span>*</span></label>
-                                        <input type="text" name="zip" value="{{ add.zip }}" >
-                                    </div>
-                                </div>
-                               <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label>Phone number</label>
-                                        <input type="text" name="phone_number_reciver" value="{{ add.phone_number_reciver }}">
-                                    </div>
-                                </div>
-                                <div class="order_button pt-3">
-                                    <button class="btn btn-md btn-black-default-hover" type="submit">save</button>
-                                </div>
-                            </div>
-                        </form>
-                        </div>
-                            {% endfor %}
-            <div class="panel-default">
-{#                    <label class="checkbox-default" for="currencyCod" data-bs-toggle="collapse"#}
-{#                        data-bs-target="#methodCod">#}
-{#                        <input type="checkbox" id="currencyCod">#}
-{#                        <span>create adress</span>#}
-{#                    </label>#}
-                    <div id="methodCod" class="collapse" data-parent="#methodCod">
-                        <form class="card-body1" action="" method="post">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="default-form-box">
-                                        <label>First Name <span>*</span></label>
-                                        <input type="text" name="first_name_recivier">
-                                    </div>
-                                </div>
-                            <div class="col-lg-6">
-                                <div class="default-form-box">
-                                    <label>Last Name <span>*</span></label>
-                                    <input type="text" name="last_name_recivier">
-                                </div>
-                            </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label for="country">province <span>*</span></label>
-                                      <input type="text" name="province" >
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label> address <span>*</span></label>
-                                       <input name="apartment_address" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label>zip code <span>*</span></label>
-                                        <input type="text" name="zip" >
-                                    </div>
-                                </div>
-                               <div class="col-12">
-                                    <div class="default-form-box">
-                                        <label>Phone number</label>
-                                         <input type="text" name="phone_number_reciver" >
-                                    </div>
-                                </div>
-                                <div class="order_button pt-3">
-                                    <button class="btn btn-md btn-black-default-hover" type="submit">save</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
                             </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
@@ -148,29 +157,41 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Product</th>
+                                            <th>image</th>
+                                            <th>product</th>
+                                            <th>number</th>
                                             <th>Total</th>
                                         </tr>
                                     </thead>
+                                {% for id,item in cart_data.items %}
                                     <tbody>
-                                    {% for id,item in cart_data.items %}
-                                        <tr>
-                                            <td> {{ item.name }}<strong> × {{ item.qty }}</strong></td>
-                                            <td>${{ item.totla_price }}</td>
-                                    {% endfor %}
+                                            <td> <a href="{% url "productdetail" item.slug_category item.slug %}" style="width: 20px;height: 20px;">
+                                    {% for image in item.media %}
+                                        <img src="{{ image.file }}" style="width:90px ;height: 90px" >
+                                    {% endfor %}</a></td>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.qty }}</td>
+                                            <td>{{ item.total_price }}</td>
                                     </tbody>
+                                  {% endfor %}
                                     <tfoot>
                                         <tr>
-                                            <th>Cart Subtotal</th>
-                                            <td>${{ cart_total_amount}}</td>
+                                            <th>TOTAL AMONT</th>
+                                            <td></td>
+                                            <td></td>
+                                            <td>${{ total_amount}}</td>
                                         </tr>
                                         <tr>
-                                            <th>Shipping</th>
-                                            <td><strong>$5.00</strong></td>
+                                            <th>DISCOUNT</th>
+                                            <td></td>
+                                            <td></td>
+                                            <td><strong>${{ total_discount_amount }}</strong></td>
                                         </tr>
                                         <tr class="order_total">
                                             <th>Order Total</th>
-                                            <td><strong>$220.00</strong></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><strong>${{ cart_total_amount }}</strong></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -188,3 +209,38 @@
         </div>
     </div><!-- ...:::: End Checkout Section:::... -->
 {% endblock %}
+       {% block extra_scripts %}
+     <script type="text/javascript">
+        $(document).on("submit" , "#createaddresses" , function(b){
+            b.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{% url "createaddress" %}",
+                data:{
+                    province : $("#province").val(),
+                    city : $("#city").val(),
+                    first_name_recivier : $("#first_name_recivier").val(),
+                    last_name_recivier : $("#last_name_recivier").val(),
+                    apartment_address : $("#apartment_address").val(),
+                    zip : $("#zip").val(),
+                    phone_number_reciver : $("#phone_number_reciver").val(),
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                },
+                success: function(data){
+                    $("h5").html(data);
+                }
+            })
+        })
+    </script>
+           <script>
+document.getElementById('addressForm').addEventListener('submit', function(event) {
+    let selectedAddress = document.querySelector('input[name="selectedAddress"]:checked');
+    if (selectedAddress) {
+        console.log('Selected Address ID:', selectedAddress.value);
+    } else {
+        event.preventDefault();
+        alert('Please select an address.');
+    }
+});
+</script>
+{% endblock extra_scripts %}
