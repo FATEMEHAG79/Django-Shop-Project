@@ -34,11 +34,11 @@
                                     <button  class="btn btn-block btn-lg btn-black-default-hover"
                                          id="delete-item-product" data-product="{{ id }}"><i class="fa fa-trash-o"></i></button>
                                 </td>
-                                <td class="product_thumb">{% for image in item.media %}
-                                    <a href="{% url "productdetail" item.slug_category item.slug %}" style="width: 20px;height: 20px;">
-                                        <img
-                                            src="{{ image.url }}"
-                                            alt=""></a>{% endfor %}</td>
+                                <td class="product_thumb"><a href="{% url "productdetail" item.slug_category item.slug %}" style="width: 20px;height: 20px;">
+                                    {% for image in item.media %}
+                                        <img src="{{ image.file }}" >
+
+                                    {% endfor %}</a></td>
                                 <td class="product_name"><a href="{% url "productdetail" item.slug_category item.slug %}">{{ item.name }}</a></td>
                                 <td class="product-price">${{ item.price }}</td>
                                 <td class="product_quantity"><label>Quantity</label> <input min="1"
@@ -57,39 +57,33 @@
 </div> <!-- End Cart Table -->
 
 <!-- Start Coupon Start -->
-<div class="coupon_area">
+<div class="cart-table-wrapper" data-aos="fade-up" data-aos-delay="0">
 <div class="container">
     <div class="row">
-        <div class="col-lg-6 col-md-6">
-            <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
-                <h3>Coupon</h3>
-                <div class="coupon_inner">
-                    <p>Enter your coupon code if you have one.</p>
-                    <input class="mb-2" placeholder="Coupon code" type="text">
-                    <button type="submit" class="btn btn-md btn-golden">Apply coupon</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 col-md-6">
+        <div class="table_page table-responsive">
             <div class="coupon_code right" data-aos="fade-up" data-aos-delay="400">
                 <h3>Cart Totals</h3>
                 <div class="coupon_inner">
                     <div class="cart_subtotal">
                         <p>Subtotal</p>
-                        <p class="cart_amount">${{ cart_total_amount}}</p>
+                        <p class="cart_amount">${{ total_amount}}</p>
                     </div>
-                    <div class="cart_subtotal ">
-                        <p>Shipping</p>
-                        <p class="cart_amount"><span>Flat Rate:</span> $255.00</p>
+                    <div class="cart_subtotal">
+                        <p>DISCOUNT</p>
+                        <p class="cart_amount">${{ totla_discount_amount}}</p>
                     </div>
-                    <a href="#">Calculate shipping</a>
+                    <hr style="height: 5px;color: black">
 
                     <div class="cart_subtotal">
                         <p>Total</p>
-                        <p class="cart_amount">$215.00</p>
+                        <p class="cart_amount">${{ cart_total_amount}}</p>
                     </div>
                     <div class="checkout_btn">
-                        <a href="#" class="btn btn-md btn-golden">Proceed to Checkout</a>
+                          {% if user.is_authenticated %}
+                        <a href="{% url "checkout" request.user.slug%}" class="btn btn-md btn-golden">Proceed to Checkout</a>
+                        {% else %}
+                        <a href="{% url 'signup/in' %}" class="btn btn-md btn-golden">Proceed to Checkout</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

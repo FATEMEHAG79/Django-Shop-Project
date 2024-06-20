@@ -8,6 +8,8 @@
 <div class="cart-table-wrapper" data-aos="fade-up" data-aos-delay="0">
 <div class="container">
     <div class="row">
+    <!-- User Quick Action Form -->
+                <!-- User Quick Action Form -->
         <div class="col-12">
             <div class="table_desc">
                 <div class="table_page table-responsive">
@@ -26,6 +28,7 @@
                         </thead> <!-- End Cart Table Head -->
                         <tbody>
                             <!-- Start Cart Single Item-->
+                            {% if cart_data %}
                             {% for id,item in cart_data.items %}
                             <tr>
                              <td class="product_remove">
@@ -36,18 +39,21 @@
                                     <button  class="btn btn-block btn-lg btn-black-default-hover"
                                          id="delete-item-product" data-product="{{ id }}"><i class="fa fa-trash-o"></i></button>
                                 </td>
-                                <td class="product_thumb">{% for image in item.media %}
+                                <td class="product_thumb">
                                     <a href="{% url "productdetail" item.slug_category item.slug %}" style="width: 20px;height: 20px;">
-                                        <img
-                                            src="{{ image.file.url }}"
-                                            alt=""></a>{% endfor %}</td>
-                                <td class="product_name"><a href="{% url "productdetail" item.slug_category item.slug %}">{{ item.name }}</a></td>
+                                    {% for image in item.media %}
+                                        <img src="{{ image.file }}" >
+
+                                    {% endfor %}</a>
+                                </td>
+                                <td class="product_name"><a href="">{{ item.name }}</a></td>
                                 <td class="product-price">${{ item.price }}</td>
                                 <td class="product_quantity"><label>Quantity</label> <input min="1"
                                         max="100" value="{{ item.qty }}" type="number" class="product-qty-{{ id }}"></td>
-                                <td class="product_total">${{ item.totla_price }}</td>
+                                <td class="product_total">${{ item.total_price }}</td>
                             </tr> <!-- End Cart Single Item-->
                             {% endfor %}
+                            {% endif %}
                             <!-- Start Cart Single Item-->
                         </tbody>
                     </table>
@@ -68,9 +74,13 @@
                 <div class="coupon_inner">
                     <div class="cart_subtotal">
                         <p>Subtotal</p>
-                        <p class="cart_amount">${{ cart_total_amount}}</p>
+                        <p class="cart_amount">${{ total_amount}}</p>
                     </div>
-                    <a href="#">Calculate shipping</a>
+                    <div class="cart_subtotal">
+                        <p>DISCOUNT</p>
+                        <p class="cart_amount">${{ total_discount_amount}}</p>
+                    </div>
+                    <hr style="height: 5px;color: black">
 
                     <div class="cart_subtotal">
                         <p>Total</p>
@@ -78,7 +88,7 @@
                     </div>
                     <div class="checkout_btn">
                           {% if user.is_authenticated %}
-                        <a href="{% url "checkout" request.user.slug%}" class="btn btn-md btn-golden">Proceed to Checkout</a>
+                        <a href="{% url "checkout" %}" class="btn btn-md btn-golden">Proceed to Checkout</a>
                         {% else %}
                         <a href="{% url 'signup/in' %}" class="btn btn-md btn-golden">Proceed to Checkout</a>
                         {% endif %}
