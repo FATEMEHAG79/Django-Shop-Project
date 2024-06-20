@@ -203,7 +203,6 @@ class CreateAddress(generic.RedirectView):
         city = self.request.POST.get("city")
         apartment_address = self.request.POST.get("apartment_address")
         phone_number_reciver = self.request.POST.get("phone_number_reciver")
-        print(city)
         address = Address.objects.create(
             user=user,
             first_name_recivier=first_name_recivier,

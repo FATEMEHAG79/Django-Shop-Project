@@ -1,5 +1,5 @@
 from django.views.generic import DetailView
-from apps.shop.models import Product, Category, Brand,Media
+from apps.shop.models import Product, Category, Media
 from django.shortcuts import render
 
 
@@ -9,12 +9,13 @@ class CategoryDetailView(DetailView):
     def get(self, request, slug):
         itemcategory = Category.objects.filter(parent__slug=slug)
         productlist = Product.objects.select_related("category__parent").filter(
-            category__parent__slug=slug)
-        media_file= Media.objects.filter(product__category__parent__slug=slug)
+            category__parent__slug=slug
+        )
+        media_file = Media.objects.filter(product__category__parent__slug=slug)
         context = {
             "itemcategory": itemcategory,
             "productlist": productlist,
-            "media" :media_file,
+            "media": media_file,
         }
 
         return render(request, "product/category-detail.html", context)
