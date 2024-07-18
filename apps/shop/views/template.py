@@ -57,6 +57,6 @@ class AddComment(generic.RedirectView):
         name = self.request.POST.get("name")
         txt = self.request.POST.get("txt")
         product = Product.objects.get(slug=slug)
-        comment = Comment.objects.create(name=name, text=txt,product=product)
+        comment = Comment.objects.create(name=name, text=txt, product=product)
         comment.save()
         return redirect("home")
