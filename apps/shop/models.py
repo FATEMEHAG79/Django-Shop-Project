@@ -1,7 +1,6 @@
 from django.db import models
 from utils.filename import maker
 from django.template.defaultfilters import slugify
-from apps.user.models import User
 from apps.core.models import TimeStampMixin, LogicalMixin
 from functools import partial
 from django.core.validators import FileExtensionValidator
@@ -97,9 +96,9 @@ class Product(LogicalMixin, TimeStampMixin):
         return self.is_active
 
 
-class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=30)
+class Comment(LogicalMixin, TimeStampMixin):
+    name = models.CharField(max_length=150)
     text = models.CharField(max_length=150)
-    date_text = models.DateTimeField(auto_now=True)
-    Product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="comment"
+    )
