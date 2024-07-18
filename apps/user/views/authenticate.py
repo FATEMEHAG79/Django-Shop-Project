@@ -11,10 +11,10 @@ from django.contrib.auth import authenticate, login
 class SendOtp(generic.CreateView):
     template_name = "auth/sendotp.html"
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         email = request.POST.get("email", None)
         # otp
         token = uuid4().hex
