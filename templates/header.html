@@ -11,10 +11,7 @@
                                     <a href=""><img src="{%static 'images/favicon.ico'%}" alt=""></a>
                                 </div>
                             </div>
-                            <select name="language">
-                                <option value="en-US">English</option>
-                                <option value="es-ES">Persion</option>
-                            </select>
+
                             <!-- End Header Logo -->
                             <!-- Start Header Main Menu -->
                             <div class="main-menu menu-color--black menu-hover-color--golden">
@@ -45,31 +42,7 @@
                                                 </ul>
                                             </div>
                                         </li>
-                                        <li class="has-dropdown">
-                                            <a href="">Welog Beauty <i
-                                                    class="fa fa-angle-down"></i></a>
-                                            <!-- Sub Menu -->
-                                            <ul class="sub-menu">
-                                                <li><a href="">Perfume</a>
-                                                </li>
-                                                <li><a href="">Hair Care</a>
-                                                </li>
-                                                <li><a href="">Cosmetic</a></li>
-                                                <li><a href="">Skin Care</a></li>
-                                                <li><a href=""></a>Nail Care</li>
-                                                <li><a href="">Eyebrow Care</a></li>
-                                                <li><a href="">Health</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="has-dropdown">
-                                            <a href="#">The Most Popular Berand<i class="fa fa-angle-down"></i></a>
-                                            <!-- Sub Menu -->
-                                            <ul class="sub-menu">
-                                                <li><a href="">DERMATYPIQUE</a></li>
-                                                <li><a href="">CI GOL</a></li>
-                                                <li><a href="">CERITA</a></li>
-                                            </ul>
-                                        </li>
+
                                         <li>
                                             <a href="{% url 'about'%}">About Us</a>
                                         </li>
@@ -98,12 +71,7 @@
                                     {% endif %}
 
                                 </li>
-                                <li>
-                                    <a href="#offcanvas-wishlish" class="offcanvas-toggle">
-                                        <i class="icon-heart"></i>
-                                        <span class="item-count">3</span>
-                                    </a>
-                                </li>
+
                                 <li>
                                     <a href="#offcanvas-add-cart" class="offcanvas-toggle ">
                                         <i class="icon-bag"></i>
@@ -220,30 +188,6 @@
                                     </ul>
                                 </li>
                             {% endfor %}
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#"><span>Welog Beauty</span></a>
-                            <ul class="mobile-sub-menu">
-                                <li>
-                                    <ul class="mobile-sub-menu">
-                                       <li><a href="">Perfume</a></li>
-                                        <li><a href="">Hair Care</a></li>
-                                        <li><a href="">Cosmetic</a></li>
-                                        <li><a href="">Skin Care</a></li>
-                                        <li><a href=""></a>Nail Care</li>
-                                        <li><a href="">Eyebrow Care</a></li>
-                                        <li><a href="">Health</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#"><span>The Most Popular Berand</span></a>
-                            <ul class="mobile-sub-menu">
-                                <li><a href="">DERMATYPIQUE</a></li>
-                                <li><a href="">CI GOL</a></li>
-                                <li><a href="">CERITA</a></li>
                             </ul>
                         </li>
                         <li><a href="{% url 'about'%}">About Us</a></li>
