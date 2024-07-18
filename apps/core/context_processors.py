@@ -1,4 +1,5 @@
 from apps.shop.models import Category, Brand, Product, Media
+from django.db.models import F
 
 
 def myquery(request):
@@ -19,6 +20,8 @@ def myquery(request):
         media_files = Media.objects.filter(product=product)
         item["media"] = media_files
         cart_total_amount += int(item["qty"]) * float(item["price"])
+    product_discount = Product.objects.filter(discount_price__lt=F("price"))
+    media = Media.objects.filter(product__in=product_discount)
 
     context = {
         "category": Category.objects.filter(parent=None),
@@ -26,5 +29,7 @@ def myquery(request):
         "cart_data": cart_data,
         "cart_total_amount": cart_total_amount,
         "brands": Brand.objects.all(),
+        "product_discount": product_discount,
+        "media": media,
     }
     return context
