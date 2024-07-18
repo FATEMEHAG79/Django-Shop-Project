@@ -15,4 +15,9 @@ urlpatterns = [
         template.ProductDetailView.as_view(),
         name="productdetail",
     ),
+    path(
+        "comment/<str:slug>",
+        template.AddComment.as_view(),
+        name="comment",
+    ),
 ]
