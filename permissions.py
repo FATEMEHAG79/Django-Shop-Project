@@ -1,14 +1,13 @@
-from django.contrib.auth.models import Permission,Group
+from django.contrib.auth.models import Permission, Group
 from django.contrib.contenttypes.models import ContentType
 from apps.user.models import User, Address
-from apps.order.models import Order,OrderItem,Coupon
+from apps.order.models import Order, OrderItem, Coupon
 from apps.shop.models import Product, Comment, Category
 
 
 manager_group, created = Group.objects.get_or_create(name="product-manager")
 operator_group, created = Group.objects.get_or_create(name="operator")
 observer_group, created = Group.objects.get_or_create(name="controller")
-
 
 
 product_content_type = ContentType.objects.get_for_model(Product)
@@ -27,18 +26,16 @@ manage_product_permissions = Permission.objects.filter(
 manage_comment_permissions = Permission.objects.filter(
     content_type=comment_content_type
 )
-adress_permissions = Permission.objects.filter(
-    content_type=address_content_type
-)
+adress_permissions = Permission.objects.filter(content_type=address_content_type)
 manage_category_permissions = Permission.objects.filter(
     content_type=category_content_type
 )
-manage_copon_permissions = Permission.objects.filter(
-    content_type=coupon_content_type
-)
+manage_copon_permissions = Permission.objects.filter(content_type=coupon_content_type)
 view_user_permissions = Permission.objects.filter(content_type=user_content_type)
 view_order_permissions = Permission.objects.filter(content_type=order_content_type)
-view_orderitem_permissions = Permission.objects.filter(content_type=order_item_content_type)
+view_orderitem_permissions = Permission.objects.filter(
+    content_type=order_item_content_type
+)
 view_all_permissions = Permission.objects.all()
 
 

@@ -32,7 +32,7 @@ $(function() {
 			$('#contact-form input,#contact-form textarea').val('');
 		})
 		.fail(function(data) {
-			// Make sure that the formMessages div has the 'error' class. 
+			// Make sure that the formMessages div has the 'error' class.
 			$(formMessages).removeClass('success');
 			$(formMessages).addClass('error');
 
