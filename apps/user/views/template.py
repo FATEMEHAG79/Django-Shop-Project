@@ -116,7 +116,7 @@ class ActivateProfile(generic.RedirectView):
                         },
                     )
                     return redirect("send_email")
-        return redirect("profile", User.objects.get(user=user).slug)
+        return redirect("profile", User.objects.get(email=user.email).slug)
 
 
 class Changepassword(generic.RedirectView):
